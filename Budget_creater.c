@@ -9,7 +9,8 @@ int main() {
     char usrname[INFOLENGTH] = {};
     char paswrd[INFOLENGTH] = {};
     char paswrd2ndcheck[INFOLENGTH] = {};
-    int attempts = 0;
+    int attempts = 0, ilios = 0, option = 0;
+    float income = 0;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -24,62 +25,90 @@ int main() {
 
         printf("Enter username: ");
         scanf("%19s", usrname);//collects the username
+        while(ilios==0){
 
-        FILE *Usr1 = fopen(usrname, "r");//looks for a file with a similar name to the users, username given.
-        if (Usr1 == NULL) {//if the username/ file doesn't exist this will return null allowing the code to exit.
-            printf("\nUsername not recognized. Please try again or create a new account.\n");
-            return 1;
-        }
+            FILE *Usr1 = fopen(usrname, "r");//looks for a file with a similar name to the users, username given.
+            if (Usr1 == NULL) {//if the username/ file doesn't exist this will return null allowing the code to exit.
+                printf("\nUsername not recognized. Please try again or create a new account.\n");
+                ilios = 2;
+                return 1;
+            }
 
-        while (attempts < 3) {
-            printf("Enter password: ");
-            scanf("%19s", paswrd);
+            while (attempts < 3) {
+                printf("Enter password: ");
+                scanf("%19s", paswrd);
 
-            // Read the stored password from file
-            fscanf(Usr1, "%19s", paswrd2ndcheck);
-            fclose(Usr1); // Close file after reading
+                // Read the stored password from file
+                fscanf(Usr1, "%19s", paswrd2ndcheck);
+                fclose(Usr1); // Close file after reading
 
-            if (strcmp(paswrd, paswrd2ndcheck) == 0) {
-                printf("\nPassword correct. Welcome!\n");
-                return 0;
-            } else {
-                printf("\nIncorrect password. Attempts remaining: %d\n", 2 - attempts);
-                attempts++;
-                Usr1 = fopen(usrname, "r"); // Reopen file for next attempt
-                if (Usr1 == NULL) {
-                    printf("\nError reopening user file.\n");
-                    return 1;
+                if (strcmp(paswrd, paswrd2ndcheck) == 0) {
+                    printf("\nPassword correct. Welcome!\n");
+                    ilios = 1;
+                    break;
+                } else {
+                    printf("\nIncorrect password. Attempts remaining: %d\n", 2 - attempts);
+                    attempts++;
+                    Usr1 = fopen(usrname, "r"); // Reopen file for next attempt
+                    if(attempts == 3){
+                        printf("Too many attempts.\nTry again later. ");
+                        return 1;
+                    }
+                    if (Usr1 == NULL) {
+                        printf("\nError reopening user file.\n");
+                        ilios = 2;
+                    }
+
                 }
             }
-        }
-        printf("Too many incorrect attempts. Please try again later.\n");
-        return 1;
 
-    } else if (usrstat == 'N' || usrstat == 'n') {
-        // New user account creation
-        printf("Let's create your account.\n");
+    }
+}
+        else if (usrstat == 'N' || usrstat == 'n') {
+            // New user account creation
+            printf("Let's create your account.\n");
 
-        printf("Enter a username (max 19 characters): ");
-        scanf("%19s", usrname);
+            printf("Enter a username (max 19 characters): ");
+            scanf("%19s", usrname);
 
-        FILE *Usr = fopen(usrname, "w");
+            FILE *Usr = fopen(usrname, "w");
         if (Usr == NULL) {
             printf("\nError: Failed to create account.\n");
-            return 1;
+            ilios=2;
+            exit(0);
+            }
+
+            printf("Enter your password: ");
+            scanf("%19s", paswrd);
+
+            fprintf(Usr, "%s", paswrd);
+            fclose(Usr);//Get rid of in order to continue working with the code later.
+
+            printf("\nAccount successfully created! You can now log in.\n");
+
         }
-
-        printf("Enter your password: ");
-        scanf("%19s", paswrd);
-
-        fprintf(Usr, "%s", paswrd);
-        fclose(Usr);
-
-        printf("\nAccount successfully created! You can now log in.\n");
-
-    } else {
-        printf("\nInvalid input. Please restart the program and enter 'Y' or 'N'.\n");
-        return 1;
+        else {
+            printf("\nInvalid input. Please restart the program and enter 'Y' or 'N'.\n");
+            ilios=2;
+        }
+    if(ilios==1){
+        printf("What actions would you like to perform today?\n");
+        printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit");
+        scanf("%d",&option);
+        printf("\n You have chosen option %d",option);
+        while(option!=4){
+            switch(option){
+                case 0:
+                    printf("\nHello");
+                case 4:
+                    exit(0);
+                default:
+                    printf("Invalid option.");
+        }
     }
 
-    return 0;
 }
+return 0;
+}
+
+
