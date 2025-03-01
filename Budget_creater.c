@@ -117,6 +117,7 @@ int main() {
                     sleep(5);
                     FILE *Usr1 = fopen(usrname, "w");
                     printf("The budget has been cleared\n");
+                    fclose(Usr1);
 
                 case 4:
                     printf("\nEXITING!");
