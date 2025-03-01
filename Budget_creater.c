@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define INFOLENGTH 20
 
@@ -11,6 +12,7 @@ int main() {
     char paswrd2ndcheck[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0;
     float income = 0;
+    char confir;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -24,7 +26,7 @@ int main() {
         printf("Welcome back!\n");
 
         printf("Enter username: ");
-        scanf("%19s", usrname);//collects the username
+        scanf(" %19s", usrname);//collects the username
         while(ilios==0){
 
             FILE *Usr1 = fopen(usrname, "r");//looks for a file with a similar name to the users, username given.
@@ -93,14 +95,31 @@ int main() {
         }
     if(ilios==1){
         printf("What actions would you like to perform today?\n");
-        printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit");
+        printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
         scanf("%d",&option);
-        printf("\n You have chosen option %d",option);
+        printf("\nYou have chosen option %d",option);
         while(option!=4){
             switch(option){
                 case 0:
-                    printf("\nHello");
+                    printf("\nHello, in order to create your new budget plan I will have to collect some information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
+                    scanf("%d",confir);
+                    if(confir == 'Y'||confir == 'y'){
+                        printf("\nLet us continue\n");
+                    }
+                    else if(confir == 'n'|| confir == 'N')
+                    {
+                        printf("I understand that you might not be willing to give up this information and that's perfectly fine.\nHave a nice day.");
+                        exit(0);
+                    }
+                    break;
+                case 2:
+                    printf("\n\nClearing your budget\n");
+                    sleep(5);
+                    FILE *Usr1 = fopen(usrname, "w");
+                    printf("The budget has been cleared\n");
+
                 case 4:
+                    printf("\nEXITING!");
                     exit(0);
                 default:
                     printf("Invalid option.");
@@ -110,5 +129,3 @@ int main() {
 }
 return 0;
 }
-
-
