@@ -10,8 +10,8 @@ int main() {
     char usrname[INFOLENGTH] = {};
     char paswrd[INFOLENGTH] = {};
     char paswrd2ndcheck[INFOLENGTH] = {};
-    int attempts = 0, ilios = 0, option = 0;
-    float income = 0;
+    int attempts = 0, ilios = 0, option = 0,option_x;
+    float income = 0,incomeCEL,expenses1;
     char confir;
 
     printf("Welcome to the budget app.\n");
@@ -102,9 +102,10 @@ int main() {
             switch(option){
                 case 0:
                     printf("\nHello, in order to create your new budget plan I will have to collect some information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
-                    scanf("%d",confir);
+                    scanf(" %c",&confir);
                     if(confir == 'Y'||confir == 'y'){
                         printf("\nLet us continue\n");
+                        exit(0);//Continue from here-------------------------------
                     }
                     else if(confir == 'n'|| confir == 'N')
                     {
@@ -112,21 +113,47 @@ int main() {
                         exit(0);
                     }
                     break;
+                case 1:
+                    printf("\nWhat information would you like to update?\n");
+                    printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n");
+                    scanf("%d",option_x);
+                    do{
+                        switch(option_x){
+                            case 5:
+                                printf("\n What is the new income value you would like to use?\n");
+                                scanf("%f",&incomeCEL);
+                                sleep(2);
+                                printf("Value Updated");
+                                break;
+                            case 6:
+                                printf("\nWhat would you like to change your total expenses to?\n");
+                                scanf("%f",&expenses1);
+                                sleep(2);
+                                printf("\nValue Updated\n");
+                                break;
+                            case 7:
+                                printf("\nCancel\n");
+                                break;
+                    }
+                    }while(option_x!=3);
+
                 case 2:
                     printf("\n\nClearing your budget\n");
                     sleep(5);
                     FILE *Usr1 = fopen(usrname, "w");
                     printf("The budget has been cleared\n");
                     fclose(Usr1);
-
+                    break;
                 case 4:
                     printf("\nEXITING!");
                     exit(0);
                 default:
                     printf("Invalid option.");
+                    break;
         }
     }
 
 }
 return 0;
 }
+
