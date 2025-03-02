@@ -148,7 +148,7 @@ int main() {
                     printf("\nEXITING!");
                     exit(0);
                 default:
-                    printf("Invalid option.");
+                    printf("\nInvalid option!");
                     break;
         }
     }
