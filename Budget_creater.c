@@ -10,8 +10,10 @@ int main() {
     char usrname[INFOLENGTH] = {};
     char paswrd[INFOLENGTH] = {};
     char paswrd2ndcheck[INFOLENGTH] = {};
+    char line[1024];
+    char passave[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x;
-    float income = 0,incomeCEL,expenses1;
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.0,income_tax=income/tax_rate;
     char confir;
 
     printf("Welcome to the budget app.\n");
@@ -63,6 +65,7 @@ int main() {
 
                 }
             }
+            fclose(Usr1);
 
     }
 }
@@ -98,14 +101,26 @@ int main() {
         printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
         scanf("%d",&option);
         printf("\nYou have chosen option %d",option);
+        FILE *Rs1 = fopen(usrname, "a");
+        if(Rs1==NULL)
+        {
+            printf("There seems to have been a problem, terminating.");
+        }
         while(option!=4){
             switch(option){
                 case 0:
-                    printf("\nHello, in order to create your new budget plan I will have to collect some information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
+                    printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
                     scanf(" %c",&confir);
                     if(confir == 'Y'||confir == 'y'){
                         printf("\nLet us continue\n");
-                        exit(0);//Continue from here-------------------------------
+                        printf("\nEnter your yearly income (Without commas):\n");
+                        scanf("%f",&income);
+                        fprintf(Rs1,"\n\n|         Income      |");
+                        fprintf(Rs1,"\n%8d",income);
+                        printf("\nYou entered an income value of %2.f.\n",income);
+                        printf("With a tax rate of %d%% your income after taxes should be around %f\n",tax_rate,income_tax);
+                        fclose(Rs1);
+                        break;//Continue from here-------------------------------
                     }
                     else if(confir == 'n'|| confir == 'N')
                     {
@@ -135,20 +150,51 @@ int main() {
                                 printf("\nCancel\n");
                                 break;
                     }
-                    }while(option_x!=3);
+                    }while(option_x!=7);
 
                 case 2:
                     printf("\n\nClearing your budget\n");
                     sleep(5);
-                    FILE *Usr1 = fopen(usrname, "w");
-                    printf("The budget has been cleared\n");
-                    fclose(Usr1);
+                    FILE *Usr2 = fopen(usrname, "r");
+                    if (Usr2 == NULL) {
+                        printf("\nERROR 235");
+                        return 1;
+                    }
+                    fgets(passave, sizeof(passave), Usr2);
+                    fclose(Usr2);
+                    FILE *Usr3 = fopen(usrname, "w");
+                    if (Usr3 == NULL)
+                    {
+                        printf("\nERROR 234");
+                        return 1;
+                    }
+                    fprintf(Usr3,"%s",passave);
+                    printf("\nThe budget has been cleared\n");
+                    fclose(Usr3);
+                    return 0;
+                case 3:
+                    printf("\nPrinting your file.");
+                    FILE *Rs2 = fopen(usrname, "r");
+                    sleep(8);
+
+                    //---------------------Utilize entire file reading
+
+                    // Skip the first line
+                    if (fgets(line, sizeof(line), Rs2) == NULL) {
+                        printf("File is empty or error reading.\n");
+                    }
+
+                    // Print the remaining lines
+                    while (fgets(line, sizeof(line), Rs2) != NULL) {
+                        printf("%s", line);
+                    }
+                    fclose(Rs2);
                     break;
                 case 4:
                     printf("\nEXITING!");
                     exit(0);
                 default:
-                    printf("\nInvalid option!");
+                    printf("\nInvalid option.");
                     break;
         }
     }
