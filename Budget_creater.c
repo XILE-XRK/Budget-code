@@ -13,7 +13,7 @@ int main() {
     char line[1024];
     char passave[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x;
-    float income = 0,incomeCEL,expenses1,tax_rate = 0.0,income_tax=income/tax_rate;
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount;
     char confir;
 
     printf("Welcome to the budget app.\n");
@@ -106,8 +106,7 @@ int main() {
         {
             printf("There seems to have been a problem, terminating.");
         }
-        while(option!=4){
-            switch(option){
+        switch(option){
                 case 0:
                     printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
                     scanf(" %c",&confir);
@@ -115,10 +114,16 @@ int main() {
                         printf("\nLet us continue\n");
                         printf("\nEnter your yearly income (Without commas):\n");
                         scanf("%f",&income);
+                        income_tax=income/tax_rate;
                         fprintf(Rs1,"\n\n|         Income      |");
-                        fprintf(Rs1,"\n%8d",income);
+                        fprintf(Rs1,"\n%10f",income);
                         printf("\nYou entered an income value of %2.f.\n",income);
-                        printf("With a tax rate of %d%% your income after taxes should be around %f\n",tax_rate,income_tax);
+                        printf("With a tax rate of %.2f%% your income after taxes should be around %f\n",tax_rate,income_tax);
+                        printf("\nEnter your current total loan amount.\n");
+                        scanf("%f",&loan_amount);
+                        printf("You entered a total loan amount of %.2f",loan_amount);
+                        fprintf(Rs1,"\n\n|          Total Loans         |\n");
+                        fprintf(Rs1,"%10%f",loan_amount);
                         fclose(Rs1);
                         break;//Continue from here-------------------------------
                     }
@@ -171,7 +176,7 @@ int main() {
                     fprintf(Usr3,"%s",passave);
                     printf("\nThe budget has been cleared\n");
                     fclose(Usr3);
-                    return 0;
+                    break;
                 case 3:
                     printf("\nPrinting your file.");
                     FILE *Rs2 = fopen(usrname, "r");
@@ -199,7 +204,6 @@ int main() {
         }
     }
 
-}
 return 0;
 }
 
