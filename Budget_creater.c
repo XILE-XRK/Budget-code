@@ -4,43 +4,6 @@
 #include <unistd.h>
 
 #define INFOLENGTH 20
-void add_expenses(FILE *file); //alex added since they go before main extra options for user 
-void set_savings_goal(FILE *file);
-
-// Alex added these two funtions to give the user more options, tracking expenses and saving goals 
-void add_expenses(FILE *file) {
-    float rent, food, utilities, transport, others, total_expenses;
-    printf("\nEnter monthly expenses:\n");
-    printf("Rent: ");
-    scanf("%f", &rent);
-    printf("Food: ");
-    scanf("%f", &food);
-    printf("Utilities: ");
-    scanf("%f", &utilities);
-    printf("Transport: ");
-    scanf("%f", &transport);
-    printf("Other expenses: ");
-    scanf("%f", &others);
-    
-    total_expenses = rent + food + utilities + transport + others;
-    fprintf(file, "\n| Expense Breakdown |\n");
-    fprintf(file, "Rent: %.2f\nFood: %.2f\nUtilities: %.2f\nTransport: %.2f\nOther: %.2f\nTotal: %.2f\n", rent, food, utilities, transport, others, total_expenses);
-    
-    printf("\nTotal expenses recorded: %.2f\n", total_expenses);
-}
-
-void set_savings_goal(FILE *file) {
-    float goal, monthly_savings;
-    printf("\nEnter your total savings goal: ");
-    scanf("%f", &goal);
-    printf("Enter your monthly savings target: ");
-    scanf("%f", &monthly_savings);
-    
-    fprintf(file, "\n| Savings Goal |\n");
-    fprintf(file, "Total Goal: %.2f\nMonthly Target: %.2f\n", goal, monthly_savings);
-    
-    printf("\nYour savings goal of %.2f has been set with a monthly target of %.2f.\n", goal, monthly_savings);
-}
 
 int main() {
     char usrstat;
@@ -53,7 +16,6 @@ int main() {
     float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount;
     char confir;
 
-    //is this the menu display?
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
 
@@ -69,7 +31,7 @@ int main() {
         scanf(" %19s", usrname);//collects the username
         while(ilios==0){
 
-            FILE *Usr1 = fopen(usrname, "r");//alex might be  r+ sign might fix the problem of reopening //looks for a file with a similar name to the users, username given.
+            FILE *Usr1 = fopen(usrname, "r");//looks for a file with a similar name to the users, username given.
             if (Usr1 == NULL) {//if the username/ file doesn't exist this will return null allowing the code to exit.
                 printf("\nUsername not recognized. Please try again or create a new account.\n");
                 ilios = 2;
@@ -136,8 +98,7 @@ int main() {
         }
     if(ilios==1){
         printf("What actions would you like to perform today?\n");
-        //add 5 and 6 just more options for the user 
-        printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Add expenses\n\n5 - Set savings goal\n\n6 - Exit\n\n");
+        printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
         scanf("%d",&option);
         printf("\nYou have chosen option %d",option);
         FILE *Rs1 = fopen(usrname, "a");
@@ -150,19 +111,34 @@ int main() {
                     printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
                     scanf(" %c",&confir);
                     if(confir == 'Y'||confir == 'y'){
+                    FILE *Usr1 = fopen(usrname, "r");
+                    if (Usr1 == NULL) {
+                        printf("\nERROR 235");
+                        return 1;
+                    }
+                    fgets(passave, sizeof(passave), Usr1);
+                    fclose(Usr1);
+                    FILE *Usr3 = fopen(usrname, "w");
+                    if (Usr3 == NULL)
+                    {
+                        printf("\nERROR 234");
+                        return 1;
+                    }
+                    fprintf(Usr3,"%s",passave);
+                    fclose(Usr3);
                         printf("\nLet us continue\n");
                         printf("\nEnter your yearly income (Without commas):\n");
                         scanf("%f",&income);
                         income_tax=income/tax_rate;
                         fprintf(Rs1,"\n\n|         Income      |");
-                        fprintf(Rs1,"\n%10f",income);
+                        fprintf(Rs1,"\n%10.2f",income);
                         printf("\nYou entered an income value of %2.f.\n",income);
-                        printf("With a tax rate of %.2f%% your income after taxes should be around %f\n",tax_rate,income_tax);
+                        printf("With a tax rate of %.2%f your income after taxes should be around %f\n",tax_rate,income_tax);
                         printf("\nEnter your current total loan amount.\n");
                         scanf("%f",&loan_amount);
                         printf("You entered a total loan amount of %.2f",loan_amount);
-                        fprintf(Rs1,"\n\n|          Total Loans         |\n");
-                        fprintf(Rs1,"%10%f",loan_amount);
+                        fprintf(Rs1,"\n\n|      Total Loans      |\n");
+                        fprintf(Rs1,"%10.2f",loan_amount);
                         fclose(Rs1);
                         break;//Continue from here-------------------------------
                     }
@@ -175,7 +151,7 @@ int main() {
                 case 1:
                     printf("\nWhat information would you like to update?\n");
                     printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n");
-                    scanf("%d", &option_x); // fixed this you forgot the & sign 
+                    scanf("%d",option_x);
                     do{
                         switch(option_x){
                             case 5:
@@ -195,8 +171,8 @@ int main() {
                                 break;
                     }
                     }while(option_x!=7);
-                    break; //alex added break 
-                  case 2:
+
+                case 2:
                     printf("\n\nClearing your budget\n");
                     sleep(5);
                     FILE *Usr2 = fopen(usrname, "r");
@@ -237,13 +213,6 @@ int main() {
                 case 4:
                     printf("\nEXITING!");
                     exit(0);
-            //added because of the 2 functions above 
-                case 5:
-                    add_expenses(Rs1);
-                    break;
-                case 6:
-                    set_savings_goal(Rs1);
-                    break;
                 default:
                     printf("\nInvalid option.");
                     break;
