@@ -13,7 +13,7 @@ int main() {
     char line[1024];
     char passave[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x;
-    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount;
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util;
     char confir;
 
     printf("Welcome to the budget app.\n");
@@ -126,21 +126,25 @@ int main() {
                     }
                     fprintf(Usr3,"%s",passave);
                     fclose(Usr3);
-                        printf("\nLet us continue\n");
-                        printf("\nEnter your yearly income (Without commas):\n");
-                        scanf("%f",&income);
-                        income_tax=income/tax_rate;
-                        fprintf(Rs1,"\n\n|         Income      |");
-                        fprintf(Rs1,"\n%10.2f",income);
-                        printf("\nYou entered an income value of %2.f.\n",income);
-                        printf("With a tax rate of %.2%f your income after taxes should be around %f\n",tax_rate,income_tax);
-                        printf("\nEnter your current total loan amount.\n");
-                        scanf("%f",&loan_amount);
-                        printf("You entered a total loan amount of %.2f",loan_amount);
-                        fprintf(Rs1,"\n\n|      Total Loans      |\n");
-                        fprintf(Rs1,"%10.2f",loan_amount);
-                        fclose(Rs1);
-                        break;//Continue from here-------------------------------
+                    printf("\nLet us continue\n");
+                    printf("\nEnter your yearly income (Without commas):\n");
+                    scanf("%f",&income);
+                    income_tax=income/tax_rate;
+                    fprintf(Rs1,"\n\n|         Income      |");
+                    fprintf(Rs1,"\n%10.2f",income);
+                    printf("\nYou entered an income value of %2.f.\n",income);
+                    printf("With a tax rate of %f your income after taxes should be around %f\n",tax_rate,income_tax);
+                    printf("\nEnter your current total loan amount.\n");
+                    scanf("%f",&loan_amount);
+                    printf("You entered a total loan amount of %.2f",loan_amount);
+                    fprintf(Rs1,"\n\n|      Total Loans      |\n");
+                    fprintf(Rs1,"%10.2f",loan_amount);
+                    printf("\nEnter approximated amount of monthly utility bills:\n");
+                    scanf("%f",&util);
+                    fprintf(Rs1,"\n|        Utilities       |\n");
+                    fprintf(Rs1,"\n%10f",util);
+                    fclose(Rs1);
+                    break;//Continue from here-------------------------------
                     }
                     else if(confir == 'n'|| confir == 'N')
                     {
