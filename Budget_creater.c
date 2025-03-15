@@ -12,8 +12,8 @@ int main() {
     char paswrd2ndcheck[INFOLENGTH] = {};
     char line[1024];
     char passave[INFOLENGTH] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x;
-    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util;
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0;
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0;
     char confir;
 
     printf("Welcome to the budget app.\n");
@@ -108,53 +108,90 @@ int main() {
         }
         switch(option){
                 case 0:
-                    printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
-                    scanf(" %c",&confir);
-                    if(confir == 'Y'||confir == 'y'){
-                    FILE *Usr1 = fopen(usrname, "r");
-                    if (Usr1 == NULL) {
-                        printf("\nERROR 235");
-                        return 1;
-                    }
-                    fgets(passave, sizeof(passave), Usr1);
-                    fclose(Usr1);
-                    FILE *Usr3 = fopen(usrname, "w");
-                    if (Usr3 == NULL)
-                    {
-                        printf("\nERROR 234");
-                        return 1;
-                    }
-                    fprintf(Usr3,"%s",passave);
-                    fclose(Usr3);
-                    printf("\nLet us continue\n");
-                    printf("\nEnter your yearly income (Without commas):\n");
-                    scanf("%f",&income);
-                    income_tax=income/tax_rate;
-                    fprintf(Rs1,"\n\n|         Income      |");
-                    fprintf(Rs1,"\n%10.2f",income);
-                    printf("\nYou entered an income value of %2.f.\n",income);
-                    printf("With a tax rate of %f your income after taxes should be around %f\n",tax_rate,income_tax);
-                    printf("\nEnter your current total loan amount.\n");
-                    scanf("%f",&loan_amount);
-                    printf("You entered a total loan amount of %.2f",loan_amount);
-                    fprintf(Rs1,"\n\n|      Total Loans      |\n");
-                    fprintf(Rs1,"%10.2f",loan_amount);
-                    printf("\nEnter approximated amount of monthly utility bills:\n");
-                    scanf("%f",&util);
-                    fprintf(Rs1,"\n|        Utilities       |\n");
-                    fprintf(Rs1,"\n%10f",util);
-                    fclose(Rs1);
-                    break;//Continue from here-------------------------------
-                    }
-                    else if(confir == 'n'|| confir == 'N')
-                    {
-                        printf("I understand that you might not be willing to give up this information and that's perfectly fine.\nHave a nice day.");
-                        exit(0);
+                    while(rs==0){
+                        printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
+                        scanf(" %c",&confir);
+                        if(confir == 'Y'||confir == 'y'){
+                        FILE *Usr1 = fopen(usrname, "r");
+                        if (Usr1 == NULL) {
+                            printf("\nERROR 235");
+                            return 1;
+                        }
+                        fgets(passave, sizeof(passave), Usr1);
+                        fclose(Usr1);
+                        FILE *Usr3 = fopen(usrname, "w");
+                        if (Usr3 == NULL)
+                        {
+                            printf("\nERROR 234");
+                            return 1;
+                        }
+                        fprintf(Usr3,"%s",passave);
+                        fclose(Usr3);
+                        printf("\nLet us continue\n");
+                        printf("\nEnter your yearly income (Without commas):\n");
+                        scanf("%f",&income);
+                        income_tax=income/tax_rate;
+                        fprintf(Rs1,"\n\n|         Income      |");
+                        fprintf(Rs1,"\n         %.2f",income);
+                        printf("\nYou entered an income value of %2.f.\n",income);
+                        printf("\nDo you currently have any car payments? (Y/N)\n");
+                        scanf(" %c",&confir);
+                        while(rs==0){
+                            if(confir==121||confir==89)
+                            {
+                                rs = 0;
+                                printf("\nHow many payments of what amount do you have left on your vehicle\n");
+                                printf("\n Enter the car payment amount followed by the total months left.");
+                                scanf("%f%d",carpay,carpaymonths);
+                                /////////////////////////////////////////////////////////
+                                ////////////RedFlagAreaBelow                    /////////
+                                loan_amount = loan_amount+(carpay*carpaymonths);////////
+                                rs+=1;                                          ////////
+                                ////////////////////////////////////////////////////////
+                            }
+                            else if(confir==78||confir==110)
+                            {
+                                printf("\nThats amazing, Thats one less payment to worry about.\n");
+                                rs+=1;
+                            }
+                            else
+                            {
+                                printf("Invalid input, Try again.");
+                            }
+
+                        }
+                        printf("\nEnter your current total loan amount.\n");
+                        scanf("%f",&loan_amount);
+                        printf("You entered a total loan amount of %.2f",loan_amount);
+                        fprintf(Rs1,"\n\n|      Total Loans      |\n");
+                        fprintf(Rs1,"%         10.2f\n",loan_amount);
+                        printf("\nEnter approximated amount of monthly utility bills:\n");
+                        scanf("%f",&util);
+                        fprintf(Rs1,"\n|        Utilities       |\n");
+                        fprintf(Rs1,"\n%10.2f\n",util);
+                        printf("\nEnter number of dependents:\n");
+                        scanf("%d",&dependents);
+                        fprintf(Rs1,"\n|        Dependents      |\n");
+                        fprintf(Rs1,"\n%10d",dependents);
+                        fclose(Rs1);
+                        rs +=1;
+                        break;//Continue from here-------------------------------
+                        }
+                        else if(confir == 'n'|| confir == 'N')
+                        {
+                            printf("I understand that you might not be willing to give up this information and that's perfectly fine.\nHave a nice day.");
+                            exit(0);
+                        }
+                        else
+                        {
+                            printf("\nInvalid input, Try again.\n");
+                            //scanf(" %c",&confir);
+                        }
                     }
                     break;
                 case 1:
                     printf("\nWhat information would you like to update?\n");
-                    printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n");
+                    printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n8 = Change Dependants\n ");
                     scanf("%d",option_x);
                     do{
                         switch(option_x){
@@ -173,12 +210,49 @@ int main() {
                             case 7:
                                 printf("\nCancel\n");
                                 break;
+                            case 8:
+                                printf("What would you like to change your dependent count to?\n");
+                                scanf("%d",&dependents);
+                                sleep(2);
+                                printf("Dependents successfully updated.");
                     }
                     }while(option_x!=7);
 
                 case 2:
                     printf("\n\nClearing your budget\n");
-                    sleep(5);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
                     FILE *Usr2 = fopen(usrname, "r");
                     if (Usr2 == NULL) {
                         printf("\nERROR 235");
@@ -199,7 +273,39 @@ int main() {
                 case 3:
                     printf("\nPrinting your file.");
                     FILE *Rs2 = fopen(usrname, "r");
-                    sleep(8);
+                    printf("\n#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
+                    sleep(1);
+                    printf("#");
 
                     //---------------------Utilize entire file reading
 
