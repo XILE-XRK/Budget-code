@@ -34,16 +34,5 @@ int main() {
     printf("\nDo you have any outstanding loans? (Y/N): ");
     scanf(" %c", &confir);
     
-    if (confir == 'Y' || confir == 'y') {
-        printf("Enter your total loan amount: ");
-        scanf("%f", &loan_amount);
-        printf("Enter remaining months for repayment: ");
-        scanf("%d", &carpaymonths);
-        debt_payment = calculate_debt_payment(loan_amount, carpaymonths);
-    } else {
-        debt_payment = 0;
-    }
-    
-    printf("Enter estimated monthly utility bills: ");
-    scanf("%f"
+  
 
