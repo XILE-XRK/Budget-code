@@ -33,6 +33,45 @@ int main() {
     
     printf("\nDo you have any outstanding loans? (Y/N): ");
     scanf(" %c", &confir);
+
+    if (confir == 'Y' || confir == 'y') {
+        printf("Enter your total loan amount: ");
+        scanf("%f", &loan_amount);
+        printf("Enter remaining months for repayment: ");
+        scanf("%d", &carpaymonths);
+        debt_payment = calculate_debt_payment(loan_amount, carpaymonths);
+    } else {
+        debt_payment = 0;
+    }
     
+    printf("Enter estimated monthly utility bills: ");
+    scanf("%f", &util);
+    utilities = calculate_utilities(util);
+    
+    printf("Enter number of dependents: ");
+    scanf("%d", &dependents);
+    
+    // Display budget summary
+    printf("\n========= Budget Summary =========\n");
+    printf("Yearly Income: $%.2f\n", income);
+    printf("Tax Deduction: $%.2f\n", tax);
+    printf("Suggested Savings: $%.2f\n", savings);
+    printf("Free Spending Allowance: $%.2f\n", free_spending);
+    printf("Debt Payments (monthly): $%.2f\n", debt_payment);
+    printf("Utility Bills (monthly): $%.2f\n", utilities);
+    printf("Number of Dependents: %d\n", dependents);
+    printf("=================================\n");
+    
+    return 0;
+}
+
+// Function definitions
+float calculate_tax(float income) {
+    return income * TAX_RATE;
+}
+
+float calculate_savings(float income) {
+    return income * 0.20; // 20% savings recommendation
+}
   
 
