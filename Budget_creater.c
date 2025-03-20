@@ -12,8 +12,8 @@ int main() {
     char paswrd2ndcheck[INFOLENGTH] = {};
     char line[1024];
     char passave[INFOLENGTH] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0;
-    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0;
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0;
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0;
     char confir;
 
     printf("Welcome to the budget app.\n");
@@ -22,6 +22,7 @@ int main() {
     // Ask if the user is new or returning
     printf("\nAre you a returning user? (Y/N): ");
     scanf(" %c", &usrstat);
+    while(stat==0){
 
     if (usrstat == 'Y' || usrstat == 'y') {//compares the user response to the ascii codes.
         // Returning user login
@@ -35,7 +36,6 @@ int main() {
             if (Usr1 == NULL) {//if the username/ file doesn't exist this will return null allowing the code to exit.
                 printf("\nUsername not recognized. Please try again or create a new account.\n");
                 ilios = 2;
-                return 1;
             }
 
             while (attempts < 3) {
@@ -49,6 +49,7 @@ int main() {
                 if (strcmp(paswrd, paswrd2ndcheck) == 0) {
                     printf("\nPassword correct. Welcome!\n");
                     ilios = 1;
+                    stat=1;
                     break;
                 } else {
                     printf("\nIncorrect password. Attempts remaining: %d\n", 2 - attempts);
@@ -64,11 +65,11 @@ int main() {
                     }
 
                 }
+                fclose(Usr1);
             }
-            fclose(Usr1);
-
+        }
     }
-}
+
         else if (usrstat == 'N' || usrstat == 'n') {
             // New user account creation
             printf("Let's create your account.\n");
@@ -94,8 +95,11 @@ int main() {
         }
         else {
             printf("\nInvalid input. Please restart the program and enter 'Y' or 'N'.\n");
-            ilios=2;
+            getchar();
+            scanf("%c",&usrstat);
+
         }
+    }
     if(ilios==1){
         printf("What actions would you like to perform today?\n");
         printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
@@ -104,7 +108,8 @@ int main() {
         FILE *Rs1 = fopen(usrname, "a");
         if(Rs1==NULL)
         {
-            printf("There seems to have been a problem, terminating.");
+            printf("Error 293\nterminating.");
+            exit(0);
         }
         switch(option){
                 case 0:
@@ -114,7 +119,7 @@ int main() {
                         if(confir == 'Y'||confir == 'y'){
                         FILE *Usr1 = fopen(usrname, "r");
                         if (Usr1 == NULL) {
-                            printf("\nERROR 235");
+                            printf("\nERROR 235\nTerminating");
                             return 1;
                         }
                         fgets(passave, sizeof(passave), Usr1);
@@ -141,7 +146,7 @@ int main() {
                             {
                                 rs = 0;
                                 printf("\nHow many payments of what amount do you have left on your vehicle\n");
-                                printf("\n Enter the car payment amount followed by the total months left.");
+                                printf("\nEnter the car payment amount followed by the total months left.");
                                 scanf("%f%d",carpay,carpaymonths);
                                 /////////////////////////////////////////////////////////
                                 ////////////RedFlagAreaBelow                    /////////
@@ -173,6 +178,8 @@ int main() {
                         scanf("%d",&dependents);
                         fprintf(Rs1,"\n|        Dependents      |\n");
                         fprintf(Rs1,"\n%10d",dependents);
+                        printf("\nEnter your total assets:\n");
+                        scanf("%f",&assets);
                         fclose(Rs1);
                         rs +=1;
                         break;//Continue from here-------------------------------
@@ -185,7 +192,6 @@ int main() {
                         else
                         {
                             printf("\nInvalid input, Try again.\n");
-                            //scanf(" %c",&confir);
                         }
                     }
                     break;
@@ -331,3 +337,4 @@ int main() {
 
 return 0;
 }
+
