@@ -12,33 +12,46 @@ int main() {
     char paswrd2ndcheck[INFOLENGTH] = {};
     char line[1024];
     char passave[INFOLENGTH] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0;
-    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0;
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0;
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0;
     char confir;
+    void flushInputBuffer(void);
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
 
     // Ask if the user is new or returning
     printf("\nAre you a returning user? (Y/N): ");
-    scanf(" %c", &usrstat);
+    scanf("%s", &usrstat);
     while(stat==0){
 
     if (usrstat == 'Y' || usrstat == 'y') {//compares the user response to the ascii codes.
         // Returning user login
-        printf("Welcome back!\n");
+        printf("\n\nWelcome back!\n\n");
 
         printf("Enter username: ");
-        scanf(" %19s", usrname);//collects the username
-        while(ilios==0){
+        scanf("%19s",usrname);
+        flushInputBuffer();
+        while(ilios==0)
+        FILE *Usr1 = fopen(usrname, "r");
 
-            FILE *Usr1 = fopen(usrname, "r");//looks for a file with a similar name to the users, username given.
-            if (Usr1 == NULL) {//if the username/ file doesn't exist this will return null allowing the code to exit.
+        while (ZTX == 0) {
+            if (Usr1 == NULL) {
                 printf("\nUsername not recognized. Please try again or create a new account.\n");
-                ilios = 2;
+                flushInputBuffer();
+                printf("Enter username: ");
+                fgets(usrname,INFOLENGTH,stdin);
+
+                // Try to reopen with new input
+                Usr1 = fopen(usrname, "r");  // reattempt open
+            } else {
+                ZTX++;  // valid file found
             }
+        }
+
 
             while (attempts < 3) {
+                flushInputBuffer();
                 printf("Enter password: ");
                 scanf("%19s", paswrd);
 
@@ -75,7 +88,8 @@ int main() {
             printf("Let's create your account.\n");
 
             printf("Enter a username (max 19 characters): ");
-            scanf("%19s", usrname);
+            scanf("%19s",usrname);
+            flushInputBuffer();
 
             FILE *Usr = fopen(usrname, "w");
         if (Usr == NULL) {
@@ -115,8 +129,9 @@ int main() {
                 case 0:
                     while(rs==0){
                         printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
-                        scanf(" %c",&confir);
+                        scanf("%s",&confir);
                         if(confir == 'Y'||confir == 'y'){
+                        while (getchar() != '\n');
                         FILE *Usr1 = fopen(usrname, "r");
                         if (Usr1 == NULL) {
                             printf("\nERROR 235\nTerminating");
@@ -180,6 +195,8 @@ int main() {
                         fprintf(Rs1,"\n%10d",dependents);
                         printf("\nEnter your total assets:\n");
                         scanf("%f",&assets);
+                        fprintf(Rs1,"\n|         Total Assets    |\n");
+                        fprintf(Rs1,"\n|%10d",assets);
                         fclose(Rs1);
                         rs +=1;
                         break;//Continue from here-------------------------------
@@ -197,9 +214,10 @@ int main() {
                     break;
                 case 1:
                     printf("\nWhat information would you like to update?\n");
-                    printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n8 = Change Dependants\n ");
+                    printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit");
                     scanf("%d",option_x);
                     do{
+//////////////////////////////////////////////Do a complete Wipe of the file and update all the values, Remember to save the log in information.
                         switch(option_x){
                             case 5:
                                 printf("\n What is the new income value you would like to use?\n");
@@ -214,15 +232,25 @@ int main() {
                                 printf("\nValue Updated\n");
                                 break;
                             case 7:
-                                printf("\nCancel\n");
-                                break;
-                            case 8:
                                 printf("What would you like to change your dependent count to?\n");
                                 scanf("%d",&dependents);
                                 sleep(2);
                                 printf("Dependents successfully updated.");
+                            case 8:
+                                printf("\nWhat would you like to change your asset amount?");
+                                scanf("%f",&assets);
+                                sleep(2);
+                                printf("\nThe asset amount has been updated successfully!");
+                                break;
+                            case 14:
+                                printf("\nCancel\n");
+                                break;
+                            default:
+                                printf("\n\nERROR CODE 259\nInvalid option, Please select a valid option");
+                                break;
+                                //Make sure to add an exit case
                     }
-                    }while(option_x!=7);
+                    }while(option_x!=14);
 
                 case 2:
                     printf("\n\nClearing your budget\n");
@@ -261,7 +289,7 @@ int main() {
                     printf("#");
                     FILE *Usr2 = fopen(usrname, "r");
                     if (Usr2 == NULL) {
-                        printf("\nERROR 235");
+                        printf("\nERROR 235\nFailed to open file\n");
                         return 1;
                     }
                     fgets(passave, sizeof(passave), Usr2);
@@ -337,4 +365,7 @@ int main() {
 
 return 0;
 }
-
+void flushInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
