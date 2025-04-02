@@ -6,7 +6,7 @@
 #define INFOLENGTH 20
 
 int main() {
-    char usrstat;
+    char usrstat[INFOLENGTH] = {};
     char usrname[INFOLENGTH] = {};
     char paswrd[INFOLENGTH] = {};
     char paswrd2ndcheck[INFOLENGTH] = {};
@@ -14,25 +14,25 @@ int main() {
     char passave[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0;
     float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0;
-    char confir;
+    char confir[INFOLENGTH];
     void flushInputBuffer(void);
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
 
     // Ask if the user is new or returning
-    printf("\nAre you a returning user? (Y/N): ");
-    scanf("%s", &usrstat);
+    printf("\nAre you a returning user? (yes/no): ");
+    scanf("%s", usrstat);
     while(stat==0){
 
-    if (usrstat == 'Y' || usrstat == 'y') {//compares the user response to the ascii codes.
+    if (strcmp(usrstat,"Yes")==0||strcmp(usrstat,"yes")==0) {//compares the user response to the ascii codes. Use Strcmp and string arrays instead
         // Returning user login
         printf("\n\nWelcome back!\n\n");
 
         printf("Enter username: ");
         scanf("%19s",usrname);
-        flushInputBuffer();
-        while(ilios==0)
+        //flushInputBuffer();
+        while(ilios==0){
         FILE *Usr1 = fopen(usrname, "r");
 
         while (ZTX == 0) {
@@ -83,13 +83,13 @@ int main() {
         }
     }
 
-        else if (usrstat == 'N' || usrstat == 'n') {
-            // New user account creation
-            printf("Let's create your account.\n");
+    else if (strcmp(usrstat,"No")==0||strcmp(usrstat,"no")==0) {
+        // New user account creation
+        printf("Let's create your account.\n");
 
-            printf("Enter a username (max 19 characters): ");
-            scanf("%19s",usrname);
-            flushInputBuffer();
+        printf("Enter a username (max 19 characters): ");
+        scanf("%19s",usrname);
+        flushInputBuffer();
 
             FILE *Usr = fopen(usrname, "w");
         if (Usr == NULL) {
@@ -107,18 +107,20 @@ int main() {
             printf("\nAccount successfully created! You can now log in.\n");
 
         }
-        else {
-            printf("\nInvalid input. Please restart the program and enter 'Y' or 'N'.\n");
-            getchar();
-            scanf("%c",&usrstat);
+    else {
+        printf("\nInvalid input. Please restart the program and enter 'Yes' or 'No'.\n");
+        getchar();
+        scanf("%c",&usrstat);
 
         }
     }
     if(ilios==1){
         printf("What actions would you like to perform today?\n");
+        //Change the following menu into a function in order to clean it up and more easily add extra things in the future.
         printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
         scanf("%d",&option);
         printf("\nYou have chosen option %d",option);
+        flushInputBuffer();
         FILE *Rs1 = fopen(usrname, "a");
         if(Rs1==NULL)
         {
@@ -128,9 +130,9 @@ int main() {
         switch(option){
                 case 0:
                     while(rs==0){
-                        printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nY/N:\n");
-                        scanf("%s",&confir);
-                        if(confir == 'Y'||confir == 'y'){
+                        printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nYes/No:\n");
+                        scanf("%s",confir);
+                        if(strcmp(confir,"Yes")==0||strcmp(confir,"yes")== 0||strcmp(confir,"YES")==0||strcmp(confir,"YEs")==0||strcmp(confir,"yEs")==0||strcmp(confir,"yeS")==0){
                         while (getchar() != '\n');
                         FILE *Usr1 = fopen(usrname, "r");
                         if (Usr1 == NULL) {
@@ -153,11 +155,12 @@ int main() {
                         income_tax=income/tax_rate;
                         fprintf(Rs1,"\n\n|         Income      |");
                         fprintf(Rs1,"\n         %.2f",income);
+                        fprintf(Rs1,"\n---------------------------");
                         printf("\nYou entered an income value of %2.f.\n",income);
-                        printf("\nDo you currently have any car payments? (Y/N)\n");
-                        scanf(" %c",&confir);
+                        printf("\nDo you currently have any car payments? (Yes/No)\n");
+                        scanf(" %c",confir);
                         while(rs==0){
-                            if(confir==121||confir==89)
+                            if(strcmp(confir,"Yes")==0||strcmp(confir,"yes")== 0||strcmp(confir,"YES")==0||strcmp(confir,"YEs")==0||strcmp(confir,"yEs")==0||strcmp(confir,"yeS")==0||strcmp(confir,"Y")==0||strcmp(confir,"y")==0)
                             {
                                 rs = 0;
                                 printf("\nHow many payments of what amount do you have left on your vehicle\n");
@@ -169,14 +172,15 @@ int main() {
                                 rs+=1;                                          ////////
                                 ////////////////////////////////////////////////////////
                             }
-                            else if(confir==78||confir==110)
+                            else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")==0||strcmp(confir,"n")==0||strcmp(confir,"N")==0)
                             {
                                 printf("\nThats amazing, Thats one less payment to worry about.\n");
                                 rs+=1;
                             }
                             else
                             {
-                                printf("Invalid input, Try again.");
+                                printf("\nInvalid input, Try again.\n");
+                                scanf("%s",confir);
                             }
 
                         }
@@ -184,6 +188,7 @@ int main() {
                         scanf("%f",&loan_amount);
                         printf("You entered a total loan amount of %.2f",loan_amount);
                         fprintf(Rs1,"\n\n|      Total Loans      |\n");
+                        fprintf(Rs1,"\n---------------------------");
                         fprintf(Rs1,"%         10.2f\n",loan_amount);
                         printf("\nEnter approximated amount of monthly utility bills:\n");
                         scanf("%f",&util);
@@ -195,13 +200,13 @@ int main() {
                         fprintf(Rs1,"\n%10d",dependents);
                         printf("\nEnter your total assets:\n");
                         scanf("%f",&assets);
-                        fprintf(Rs1,"\n|         Total Assets    |\n");
+                        fprintf(Rs1,"\n|        Total Assets    |\n");
                         fprintf(Rs1,"\n|%10d",assets);
                         fclose(Rs1);
                         rs +=1;
                         break;//Continue from here-------------------------------
                         }
-                        else if(confir == 'n'|| confir == 'N')
+                        else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")==0)
                         {
                             printf("I understand that you might not be willing to give up this information and that's perfectly fine.\nHave a nice day.");
                             exit(0);
@@ -209,6 +214,7 @@ int main() {
                         else
                         {
                             printf("\nInvalid input, Try again.\n");
+                            scanf("%s",confir);
                         }
                     }
                     break;
