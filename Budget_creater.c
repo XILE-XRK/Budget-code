@@ -260,39 +260,13 @@ int main() {
 
                 case 2:
                     printf("\n\nClearing your budget\n");
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
+                    int iva = 0;
+                    while(iva<20)
+                    {
+                        printf("#");
+                        sleep(1);
+                        iva++;
+                    }
                     FILE *Usr2 = fopen(usrname, "r");
                     if (Usr2 == NULL) {
                         printf("\nERROR 235\nFailed to open file\n");
@@ -314,38 +288,13 @@ int main() {
                     printf("\nPrinting your file.");
                     FILE *Rs2 = fopen(usrname, "r");
                     printf("\n#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
-                    sleep(1);
-                    printf("#");
+                    int ido = 0;
+                    while(ido<20)
+                    {
+                        sleep(1);
+                        printf("#");
+                        ido++;
+                    }
 
                     //---------------------Utilize entire file reading
 
