@@ -4,7 +4,8 @@
 #include <unistd.h>
 
 #define INFOLENGTH 20
-
+void printLoop();
+void flushInputBuffer(void);
 int main() {
     char usrstat[INFOLENGTH] = {};
     char usrname[INFOLENGTH] = {};
@@ -12,10 +13,9 @@ int main() {
     char paswrd2ndcheck[INFOLENGTH] = {};
     char line[1024];
     char passave[INFOLENGTH] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0;
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0;
     float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0;
     char confir[INFOLENGTH];
-    void flushInputBuffer(void);
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -32,19 +32,20 @@ int main() {
         printf("Enter username: ");
         scanf("%19s",usrname);
         //flushInputBuffer();
-        while(ilios==0){
         FILE *Usr1 = fopen(usrname, "r");
+        while(ilios==0){
 
         while (ZTX == 0) {
             if (Usr1 == NULL) {
                 printf("\nUsername not recognized. Please try again or create a new account.\n");
                 flushInputBuffer();
                 printf("Enter username: ");
-                fgets(usrname,INFOLENGTH,stdin);
-
+                fgets(usrname,sizeof(usrname),stdin);
+                usrname[strcspn(usrname, "\n")] = '\0';
                 // Try to reopen with new input
                 Usr1 = fopen(usrname, "r");  // reattempt open
-            } else {
+            }
+            else {
                 ZTX++;  // valid file found
             }
         }
@@ -109,8 +110,8 @@ int main() {
         }
     else {
         printf("\nInvalid input. Please restart the program and enter 'Yes' or 'No'.\n");
-        getchar();
-        scanf("%c",&usrstat);
+        flushInputBuffer();
+        scanf("%s",&usrstat);
 
         }
     }
@@ -150,7 +151,7 @@ int main() {
                         fprintf(Usr3,"%s",passave);
                         fclose(Usr3);
                         printf("\nLet us continue\n");
-                        printf("\nEnter your yearly income (Without commas):\n");
+                        printf("\nEnter the total house yearly income (Enter the income that the entire house makes or just your income if you live alone.d)(Without commas):\n");
                         scanf("%f",&income);
                         income_tax=income/tax_rate;
                         fprintf(Rs1,"\n\n|         Income      |");
@@ -165,7 +166,8 @@ int main() {
                                 rs = 0;
                                 printf("\nHow many payments of what amount do you have left on your vehicle\n");
                                 printf("\nEnter the car payment amount followed by the total months left.");
-                                scanf("%f%d",carpay,carpaymonths);
+                                flushInputBuffer();
+                                scanf("%f%d",&carpay,&carpaymonths);
                                 /////////////////////////////////////////////////////////
                                 ////////////RedFlagAreaBelow                    /////////
                                 loan_amount = loan_amount+(carpay*carpaymonths);////////
@@ -189,22 +191,52 @@ int main() {
                         printf("You entered a total loan amount of %.2f",loan_amount);
                         fprintf(Rs1,"\n\n|      Total Loans      |\n");
                         fprintf(Rs1,"\n---------------------------");
-                        fprintf(Rs1,"%         10.2f\n",loan_amount);
+                        fprintf(Rs1,"%|         10.2f |\n",loan_amount);
                         printf("\nEnter approximated amount of monthly utility bills:\n");
                         scanf("%f",&util);
                         fprintf(Rs1,"\n|        Utilities       |\n");
-                        fprintf(Rs1,"\n%10.2f\n",util);
+                        fprintf(Rs1,"\n|%10.2f|\n",util);
                         printf("\nEnter number of dependents:\n");
-                        scanf("%d",&dependents);
+                        while(izo==0){
+                        if(dependents<0)
+                        {
+                            printf("\nEnter a positive number ");
+                            scanf("%d",&dependents);
+                        }
+                        else
+                        {
+                            scanf("%d",&dependents);
+                            izo++;
+                        }
+                        }
                         fprintf(Rs1,"\n|        Dependents      |\n");
-                        fprintf(Rs1,"\n%10d",dependents);
+                        fprintf(Rs1,"\n|%10d|",dependents);
                         printf("\nEnter your total assets:\n");
                         scanf("%f",&assets);
                         fprintf(Rs1,"\n|        Total Assets    |\n");
-                        fprintf(Rs1,"\n|%10d",assets);
+                        fprintf(Rs1,"\n|%10d|",assets);
                         fclose(Rs1);
-                        rs +=1;
-                        break;//Continue from here-------------------------------
+                        printf("\nBefore I print this into your file, would you like to update any information?\n");
+                        scanf("%s",confir);
+                        int ija = 0;
+                        while(ija==0){
+                        if(strcmp(confir,"Yes")==0||strcmp(confir,"yes")== 0||strcmp(confir,"YES")==0||strcmp(confir,"YEs")==0||strcmp(confir,"yEs")==0||strcmp(confir,"yeS")==0||strcmp(confir,"Y")==0||strcmp(confir,"y")==0)
+                        {
+                            printf("\nPrinting your information.");//This leaves potential for confirmation.
+                            printLoop();
+                            continue;
+                            ija++;
+                        }
+                        else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")){
+                                rs +=1;
+                                ija++;
+                                exit(0);
+                                }
+                        else{
+                            printf("\nInvalid Input Please try again");
+                            scanf("%s",confir);
+                            }
+                        }
                         }
                         else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")==0)
                         {
@@ -216,12 +248,11 @@ int main() {
                             printf("\nInvalid input, Try again.\n");
                             scanf("%s",confir);
                         }
-                    }
-                    break;
+                        }
                 case 1:
                     printf("\nWhat information would you like to update?\n");
                     printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit");
-                    scanf("%d",option_x);
+                    scanf("%d",&option_x);
                     do{
 //////////////////////////////////////////////Do a complete Wipe of the file and update all the values, Remember to save the log in information.
                         switch(option_x){
@@ -242,6 +273,7 @@ int main() {
                                 scanf("%d",&dependents);
                                 sleep(2);
                                 printf("Dependents successfully updated.");
+                                break;
                             case 8:
                                 printf("\nWhat would you like to change your asset amount?");
                                 scanf("%f",&assets);
@@ -261,12 +293,7 @@ int main() {
                 case 2:
                     printf("\n\nClearing your budget\n");
                     int iva = 0;
-                    while(iva<20)
-                    {
-                        printf("#");
-                        sleep(1);
-                        iva++;
-                    }
+                    printLoop();
                     FILE *Usr2 = fopen(usrname, "r");
                     if (Usr2 == NULL) {
                         printf("\nERROR 235\nFailed to open file\n");
@@ -288,14 +315,7 @@ int main() {
                     printf("\nPrinting your file.");
                     FILE *Rs2 = fopen(usrname, "r");
                     printf("\n#");
-                    int ido = 0;
-                    while(ido<20)
-                    {
-                        sleep(1);
-                        printf("#");
-                        ido++;
-                    }
-
+                    printLoop();
                     //---------------------Utilize entire file reading
 
                     // Skip the first line
@@ -324,3 +344,13 @@ void flushInputBuffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {}
 }
+void printLoop(){
+    int art =0;
+    printf("\n");
+    while(art<20)
+    {
+        printf("#");
+        sleep(1);
+        art++;
+    }
+    }
