@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
+#include "BCF.c"
 #define INFOLENGTH 20
 void printLoop();
 void flushInputBuffer(void);
@@ -106,6 +106,7 @@ int main() {
             fclose(Usr);//Get rid of in order to continue working with the code later.
 
             printf("\nAccount successfully created! You can now log in.\n");
+            exit(0);
 
         }
     else {
@@ -215,7 +216,7 @@ int main() {
                         scanf("%f",&assets);
                         fprintf(Rs1,"\n|        Total Assets    |\n");
                         fprintf(Rs1,"\n|%10d|",assets);
-                        fclose(Rs1);
+
                         printf("\nBefore I print this into your file, would you like to update any information?\n");
                         scanf("%s",confir);
                         int ija = 0;
@@ -228,9 +229,19 @@ int main() {
                             ija++;
                         }
                         else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")){
-                                rs +=1;
-                                ija++;
-                                exit(0);
+                               fprintf(Rs1,"\n\n|      Total Loans      |\n");
+                               fprintf(Rs1,"\n---------------------------");
+                               fprintf(Rs1,"%|         10.2f |\n",loan_amount);
+                               fprintf(Rs1,"\n|        Utilities       |\n");
+                               fprintf(Rs1,"\n|%10.2f|\n",util);
+                               fprintf(Rs1,"\n|        Dependents      |\n");
+                               fprintf(Rs1,"\n|%10d|",dependents);
+                               fprintf(Rs1,"\n|        Total Assets    |\n");
+                               fprintf(Rs1,"\n|%10d|",assets);
+                               fclose(Rs1);
+                               rs +=1;
+                               ija++;
+                               exit(0);
                                 }
                         else{
                             printf("\nInvalid Input Please try again");
@@ -289,6 +300,16 @@ int main() {
                                 //Make sure to add an exit case
                     }
                     }while(option_x!=14);
+                        fprintf(Rs1,"\n\n|      Total Loans      |\n");
+                        fprintf(Rs1,"\n---------------------------");
+                        fprintf(Rs1,"%|         10.2f |\n",loan_amount);
+                        fprintf(Rs1,"\n|        Utilities       |\n");
+                        fprintf(Rs1,"\n|%10.2f|\n",util);
+                        fprintf(Rs1,"\n|        Dependents      |\n");
+                        fprintf(Rs1,"\n|%10d|",dependents);
+                        fprintf(Rs1,"\n|        Total Assets    |\n");
+                        fprintf(Rs1,"\n|%10d|",assets);
+                        fclose(Rs1);
 
                 case 2:
                     printf("\n\nClearing your budget\n");
