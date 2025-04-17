@@ -50,4 +50,36 @@ int main() {
 
     // Display budget summary
     printf("\n========= Budget Summary =========\n");
+    printf("Yearly Income: $%.2f\n", income);
+    printf("Tax Deduction: $%.2f\n", tax);
+    printf("Suggested Savings: $%.2f\n", savings);
+    printf("Free Spending Allowance: $%.2f\n", free_spending);
+    printf("Debt Payments (monthly): $%.2f\n", debt_payment);
+    printf("Utility Bills (monthly): $%.2f\n", utilities);
+    printf("Number of Dependents: %d\n", dependents);
+    printf("=================================\n");
 
+    return 0;
+}
+
+// Function definitions
+float calculate_tax(float income) {
+    return income * TAX_RATE;
+}
+
+float calculate_savings(float income) {
+    return income * 0.20; // 20% savings recommendation
+}
+
+float calculate_free_spending(float income) {
+    return income * 0.15; // 15% of income for flexible spending
+}
+
+float calculate_debt_payment(float loan_amount, int months) {
+    if (months == 0) return 0; // avoid division by zero
+    return loan_amount / months;
+}
+
+float calculate_utilities(float util) {
+    return util; // in case we want to add logic later
+}
