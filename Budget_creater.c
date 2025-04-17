@@ -13,9 +13,9 @@ int main() {
     char paswrd2ndcheck[INFOLENGTH] = {};
     char line[1024];
     char passave[INFOLENGTH] = {};
+    char confir[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0;
-    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0;
-    char confir[INFOLENGTH];
+    float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -35,18 +35,27 @@ int main() {
         FILE *Usr1 = fopen(usrname, "r");
         while(ilios==0){
 
-        while (ZTX == 0) {
+        while (ZTX!=3) {
             if (Usr1 == NULL) {
-                printf("\nUsername not recognized. Please try again or create a new account.\n");
+                printf("Username not recognized. Please try again or create a new account. Enter Q to exit\n");
+                printf("You have %d attempt(s) left\n",3-ZTX);
                 flushInputBuffer();
                 printf("Enter username: ");
                 fgets(usrname,sizeof(usrname),stdin);
                 usrname[strcspn(usrname, "\n")] = '\0';
+                if(strncmp(usrname,"Q",1)==0||strncmp(usrname,"q",1)==0)
+                {
+                    printf("\nExiting");
+                    sleep(2);
+                    exit(0);
+                }
                 // Try to reopen with new input
                 Usr1 = fopen(usrname, "r");  // reattempt open
+                ZTX++;
+
             }
             else {
-                ZTX++;  // valid file found
+                ZTX=3;  // valid file found
             }
         }
 
@@ -102,7 +111,7 @@ int main() {
             printf("Enter your password: ");
             scanf("%19s", paswrd);
 
-            fprintf(Usr, "%s", paswrd);
+            fprintf(Usr, "%s\n", paswrd);
             fclose(Usr);//Get rid of in order to continue working with the code later.
 
             printf("\nAccount successfully created! You can now log in.\n");
@@ -192,7 +201,7 @@ int main() {
                         printf("You entered a total loan amount of %.2f",loan_amount);
                         fprintf(Rs1,"\n\n|      Total Loans      |\n");
                         fprintf(Rs1,"\n---------------------------");
-                        fprintf(Rs1,"%|         10.2f |\n",loan_amount);
+                        fprintf(Rs1,"|%         10.2f |\n",loan_amount);
                         printf("\nEnter approximated amount of monthly utility bills:\n");
                         scanf("%f",&util);
                         fprintf(Rs1,"\n|        Utilities       |\n");
@@ -231,7 +240,7 @@ int main() {
                         else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")){
                                fprintf(Rs1,"\n\n|      Total Loans      |\n");
                                fprintf(Rs1,"\n---------------------------");
-                               fprintf(Rs1,"%|         10.2f |\n",loan_amount);
+                               fprintf(Rs1,"|%         10.2f |\n",loan_amount);
                                fprintf(Rs1,"\n|        Utilities       |\n");
                                fprintf(Rs1,"\n|%10.2f|\n",util);
                                fprintf(Rs1,"\n|        Dependents      |\n");
@@ -262,7 +271,7 @@ int main() {
                         }
                 case 1:
                     printf("\nWhat information would you like to update?\n");
-                    printf("5 = Update income\n6 = Change expenses\n7 = Cancel\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit");
+                    printf("5 = Update income\n6 = Change expenses\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit");
                     scanf("%d",&option_x);
                     do{
 //////////////////////////////////////////////Do a complete Wipe of the file and update all the values, Remember to save the log in information.
@@ -291,6 +300,12 @@ int main() {
                                 sleep(2);
                                 printf("\nThe asset amount has been updated successfully!");
                                 break;
+                            case 9:
+                                printf("\nWhat would you like to change your loan amount to?\n");
+                                scanf("%.2f",loan_amount);
+                                sleep(2);
+                                printf("\nThe loan amount has been updated successfully!\n");
+                                break;
                             case 14:
                                 printf("\nCancel\n");
                                 break;
@@ -299,10 +314,10 @@ int main() {
                                 break;
                                 //Make sure to add an exit case
                     }
-                    }while(option_x!=14);
+                    }while(option_x!=14);// add print function information here
                         fprintf(Rs1,"\n\n|      Total Loans      |\n");
                         fprintf(Rs1,"\n---------------------------");
-                        fprintf(Rs1,"%|         10.2f |\n",loan_amount);
+                        fprintf(Rs1,"|%         10.2f |\n",loan_amount);
                         fprintf(Rs1,"\n|        Utilities       |\n");
                         fprintf(Rs1,"\n|%10.2f|\n",util);
                         fprintf(Rs1,"\n|        Dependents      |\n");
