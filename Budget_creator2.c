@@ -1,85 +1,43 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#define TAX_RATE 0.09
-
-// Function prototypes
-float calculate_tax(float income);
-float calculate_savings(float income);
-float calculate_free_spending(float income);
-float calculate_debt_payment(float loan_amount, int months);
-float calculate_utilities(float util);
-
-int main() {
-    float income = 0, tax, savings, free_spending, debt_payment, utilities;
-    float loan_amount = 0, util = 0;
-    int carpaymonths = 0, dependents = 0;
-    char confir;
-
-    printf("Welcome to the budget app.\n");
-    printf("Let's set up your budget.\n");
-
-    printf("Enter your yearly income (without commas): ");
-    scanf("%f", &income);
-
-    tax = calculate_tax(income);
-    savings = calculate_savings(income);
-    free_spending = calculate_free_spending(income);
-
-    printf("\nDo you have any outstanding loans? (Y/N): ");
-    scanf(" %c", &confir);
-
-    if (confir == 'Y' || confir == 'y') {
-        printf("Enter your total loan amount: ");
-        scanf("%f", &loan_amount);
-        printf("Enter remaining months for repayment: ");
-        scanf("%d", &carpaymonths);
-        debt_payment = calculate_debt_payment(loan_amount, carpaymonths);
-    } else {
-        debt_payment = 0;
+// Sum of multiple incomes
+float calculate_total_income(float incomes[], int count) {
+    float total = 0.0;
+    for (int i = 0; i < count; i++) {
+        total += incomes[i];
     }
-
-    printf("Enter estimated monthly utility bills: ");
-    scanf("%f", &util);
-    utilities = calculate_utilities(util);
-
-    printf("Enter number of dependents: ");
-    scanf("%d", &dependents);
-
-    // Display budget summary
-    printf("\n========= Budget Summary =========\n");
-    printf("Yearly Income: $%.2f\n", income);
-    printf("Tax Deduction: $%.2f\n", tax);
-    printf("Suggested Savings: $%.2f\n", savings);
-    printf("Free Spending Allowance: $%.2f\n", free_spending);
-    printf("Debt Payments (monthly): $%.2f\n", debt_payment);
-    printf("Utility Bills (monthly): $%.2f\n", utilities);
-    printf("Number of Dependents: %d\n", dependents);
-    printf("=================================\n");
-
-    return 0;
+    return total;
 }
 
-// Function definitions
-float calculate_tax(float income) {
-    return income * TAX_RATE;
+// Sum of car loan
+float calculate_total_car_loan(float car_payment, int months_left) {
+    return car_payment * months_left;
 }
 
-float calculate_savings(float income) {
-    return income * 0.20; // 20% savings recommendation
+// Combine existing loan and car loan
+float calculate_total_loans(float existing_loan, float car_loan) {
+    return existing_loan + car_loan;
 }
 
-float calculate_free_spending(float income) {
-    return income * 0.15; // 15% of income for flexible spending
+// Utility sum (can be updated for multiple utility types if needed)
+float calculate_utility_total(float utilities[], int count) {
+    float total = 0.0;
+    for (int i = 0; i < count; i++) {
+        total += utilities[i];
+    }
+    return total;
 }
 
-float calculate_debt_payment(float loan_amount, int months) {
-    if (months == 0) return 0; // avoid division by zero
-    return loan_amount / months;
+// Asset reporting
+float get_asset_value(float asset_input) {
+    return asset_input;  // Pure passthrough for modularity
 }
 
-float calculate_utilities(float util) {
-    return util; // in case we want to add logic later
+// Balance calculation (Income - Total Expenses)
+float calculate_remaining_balance(float income, float expenses) {
+    return income - expenses;
+}
+
+// Expense as a percentage of income
+float calculate_expense_percentage(float income, float expenses) {
+    if (income == 0) return 0;
+    return (expenses / income) * 100;
 }
