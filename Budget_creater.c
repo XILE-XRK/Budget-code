@@ -14,6 +14,7 @@ int main() {
     char line[1024];
     char passave[INFOLENGTH] = {};
     char confir[INFOLENGTH] = {};
+    char temploc[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0;
     float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0;
 
@@ -21,7 +22,7 @@ int main() {
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
 
     // Ask if the user is new or returning
-    printf("\nAre you a returning user? (yes/no): ");
+    printf("\nAre you a returning user. or have you recently created an account? (yes/no): ");
     scanf("%s", usrstat);
     while(stat==0){
 
@@ -128,7 +129,7 @@ int main() {
     if(ilios==1){
         printf("What actions would you like to perform today?\n");
         //Change the following menu into a function in order to clean it up and more easily add extra things in the future.
-        printf("\n0 - Create a new budget\n\n1 - update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
+        printf("\n0 - Create a new budget\n\n1 - Update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
         scanf("%d",&option);
         printf("\nYou have chosen option %d",option);
         flushInputBuffer();
@@ -270,11 +271,18 @@ int main() {
                         }
                         }
                 case 1:
+                    fgets(temploc,sizeof(temploc),Rs1);//reads the first line (password)
+                    if(fgets(temploc,sizeof(temploc),Rs1)==NULL){//Checks to see if there is any information in the file other than the password
+                        printf("\nERROR 6575\nYou have no information to update\n");
+                        sleep(1);
+                        printf("\nExiting\n");
+                        sleep(2);
+                        exit(0);
+                    }
                     printf("\nWhat information would you like to update?\n");
-                    printf("5 = Update income\n6 = Change expenses\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit");
+                    printf("5 = Update income\n6 = Change expenses\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit\n");
                     scanf("%d",&option_x);
                     do{
-//////////////////////////////////////////////Do a complete Wipe of the file and update all the values, Remember to save the log in information.
                         switch(option_x){
                             case 5:
                                 printf("\n What is the new income value you would like to use?\n");
@@ -308,6 +316,7 @@ int main() {
                                 break;
                             case 14:
                                 printf("\nCancel\n");
+                                exit(0);
                                 break;
                             default:
                                 printf("\n\nERROR CODE 259\nInvalid option, Please select a valid option");
@@ -328,7 +337,6 @@ int main() {
 
                 case 2:
                     printf("\n\nClearing your budget\n");
-                    int iva = 0;
                     printLoop();
                     FILE *Usr2 = fopen(usrname, "r");
                     if (Usr2 == NULL) {
@@ -337,15 +345,15 @@ int main() {
                     }
                     fgets(passave, sizeof(passave), Usr2);
                     fclose(Usr2);
-                    FILE *Usr3 = fopen(usrname, "w");
-                    if (Usr3 == NULL)
+                    Usr2 = fopen(usrname, "w");
+                    if (Usr2 == NULL)
                     {
                         printf("\nERROR 234");
                         return 1;
                     }
-                    fprintf(Usr3,"%s",passave);
+                    fprintf(Usr2,"%s",passave);
                     printf("\nThe budget has been cleared\n");
-                    fclose(Usr3);
+                    fclose(Usr2);
                     break;
                 case 3:
                     printf("\nPrinting your file.");
