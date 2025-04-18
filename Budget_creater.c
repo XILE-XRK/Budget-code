@@ -14,7 +14,7 @@ int main() {
     char line[1024];
     char passave[INFOLENGTH] = {};
     char confir[INFOLENGTH] = {};
-    char temploc[INFOLENGTH] = {};
+    char temploc[1888] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0;
     float income = 0,incomeCEL,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0;
 
@@ -271,14 +271,44 @@ int main() {
                         }
                         }
                 case 1:
-                    fgets(temploc,sizeof(temploc),Rs1);//reads the first line (password)
-                    if(fgets(temploc,sizeof(temploc),Rs1)==NULL){//Checks to see if there is any information in the file other than the password
-                        printf("\nERROR 6575\nYou have no information to update\n");
-                        sleep(1);
-                        printf("\nExiting\n");
-                        sleep(2);
-                        exit(0);
+                // Skip the password
+                fclose(Rs1);
+                Rs1 = fopen(usrname,"r");
+                if(Rs1==NULL){
+                    printf("\nFile opening failed!");
+                    exit(0);
+                }
+                fgets(temploc, sizeof(temploc), Rs1); // Read password line
+
+                int hasData = 0;
+
+                // Read the rest of the file, line by line
+                while (fgets(temploc, sizeof(temploc), Rs1) != NULL) {
+                    // Strip newline
+                    temploc[strcspn(temploc, "\n")] = '\0';
+
+                    // Check if line has any actual data (digits or alphabetic content)
+                    for (int i = 0; temploc[i] != '\0'; i++) {
+                        if ((temploc[i] >= '0' && temploc[i] <= '9') || 
+                            (temploc[i] >= 'A' && temploc[i] <= 'Z') ||
+                            (temploc[i] >= 'a' && temploc[i] <= 'z')) {
+                            hasData = 1;
+                            break;
+                        }
                     }
+                    if (hasData) break;
+                }
+
+                if (!hasData) {
+                    printf("\nERROR 6575\nYou have no information to update\n");
+                    sleep(1);
+                    printf("\nExiting\n");
+                    sleep(2);
+                    fclose(Rs1);
+                    exit(0);
+                }
+                fclose(Rs1);
+                Rs1 = fopen(usrname,"a");
                     printf("\nWhat information would you like to update?\n");
                     printf("5 = Update income\n6 = Change expenses\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit\n");
                     scanf("%d",&option_x);
