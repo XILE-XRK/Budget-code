@@ -162,7 +162,7 @@ int main() {
                         fprintf(Usr3,"%s",passave);
                         fclose(Usr3);
                         printf("\nLet us continue\n");
-                        printf("\nEnter the total house yearly income (Enter the income that the entire house makes or just your income if you live alone.d)(Without commas):\n");
+                        printf("\nEnter the total house yearly income (Enter the income that the entire house makes or just your income if you live alone.(Without commas):\n");
                         scanf("%f",&income);
                         income_tax=income/tax_rate;
                         fprintf(Rs1,"\n\n|         Income      |");
@@ -171,6 +171,7 @@ int main() {
                         printf("\nYou entered an income value of %2.f.\n",income);
                         printf("\nDo you currently have any car payments? (Yes/No)\n");
                         scanf(" %c",confir);
+                        flushInputBuffer();
                         while(rs==0){
                             if(strcmp(confir,"Yes")==0||strcmp(confir,"yes")== 0||strcmp(confir,"YES")==0||strcmp(confir,"YEs")==0||strcmp(confir,"yEs")==0||strcmp(confir,"yeS")==0||strcmp(confir,"Y")==0||strcmp(confir,"y")==0)
                             {
@@ -179,6 +180,7 @@ int main() {
                                 printf("\nEnter the car payment amount followed by the total months left.");
                                 flushInputBuffer();
                                 scanf("%f%d",&carpay,&carpaymonths);
+                                flushInputBuffer();
                                 /////////////////////////////////////////////////////////
                                 ////////////RedFlagAreaBelow                    /////////
                                 loan_amount = loan_amount+(carpay*carpaymonths);////////
@@ -199,7 +201,6 @@ int main() {
                         }
                         printf("\nEnter your current total loan amount.\n");
                         scanf("%f",&loan_amount);
-                        printf("You entered a total loan amount of %.2f",loan_amount);
                         fprintf(Rs1,"\n\n|      Total Loans      |\n");
                         fprintf(Rs1,"\n---------------------------");
                         fprintf(Rs1,"|%         10.2f |\n",loan_amount);
@@ -226,27 +227,22 @@ int main() {
                         scanf("%f",&assets);
                         fprintf(Rs1,"\n|        Total Assets    |\n");
                         fprintf(Rs1,"\n|%10d|",assets);
-
-                        printf("\nBefore I print this into your file, would you like to update any information?\n");
-                        scanf("%s",confir);
                         int ija = 0;
                         while(ija==0){
+                        printf("\nBefore I print this into your file, would you like to update any information? (Yes,No)\n");
+                        scanf("%s",confir);
                         if(strcmp(confir,"Yes")==0||strcmp(confir,"yes")== 0||strcmp(confir,"YES")==0||strcmp(confir,"YEs")==0||strcmp(confir,"yEs")==0||strcmp(confir,"yeS")==0||strcmp(confir,"Y")==0||strcmp(confir,"y")==0)
                         {
-                            printf("\nPrinting your information.");//This leaves potential for confirmation.
-                            printLoop();
-                            continue;
                             ija++;
                         }
                         else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")){
                                fprintf(Rs1,"\n\n|      Total Loans      |\n");
-                               fprintf(Rs1,"\n---------------------------");
-                               fprintf(Rs1,"|%         10.2f |\n",loan_amount);
-                               fprintf(Rs1,"\n|        Utilities       |\n");
+                               fprintf(Rs1,"|%         10.2f |",loan_amount);
+                               fprintf(Rs1,"\n|        Utilities       |");
                                fprintf(Rs1,"\n|%10.2f|\n",util);
-                               fprintf(Rs1,"\n|        Dependents      |\n");
+                               fprintf(Rs1,"\n|        Dependents      |");
                                fprintf(Rs1,"\n|%10d|",dependents);
-                               fprintf(Rs1,"\n|        Total Assets    |\n");
+                               fprintf(Rs1,"\n|        Total Assets    |");
                                fprintf(Rs1,"\n|%10d|",assets);
                                fclose(Rs1);
                                rs +=1;
@@ -255,7 +251,6 @@ int main() {
                                 }
                         else{
                             printf("\nInvalid Input Please try again");
-                            scanf("%s",confir);
                             }
                         }
                         }
@@ -309,43 +304,49 @@ int main() {
                 }
                 fclose(Rs1);
                 Rs1 = fopen(usrname,"a");
-                    printf("\nWhat information would you like to update?\n");
-                    printf("5 = Update income\n6 = Change expenses\n7 = Change Dependants\n8 = Change Assets\n\n14 = Exit\n");
-                    scanf("%d",&option_x);
                     do{
+                        printf("\nWhat information would you like to update?\n");
+                        printf("5 = Update income\n6 = Update expenses\n7 = Update Dependants\n8 = Update Assets\n9 = Loan Amount\n14 = Exit\n");
+                        scanf("%d",&option_x);
                         switch(option_x){
                             case 5:
                                 printf("\n What is the new income value you would like to use?\n");
+                                flushInputBuffer();
                                 scanf("%f",&incomeCEL);
                                 sleep(2);
-                                printf("Value Updated");
+                                printf("Income Updated");
                                 break;
                             case 6:
                                 printf("\nWhat would you like to change your total expenses to?\n");
+                                flushInputBuffer();
                                 scanf("%f",&expenses1);
                                 sleep(2);
-                                printf("\nValue Updated\n");
+                                printf("\nExpenses Updated\n");
                                 break;
                             case 7:
                                 printf("What would you like to change your dependent count to?\n");
+                                flushInputBuffer();
                                 scanf("%d",&dependents);
                                 sleep(2);
                                 printf("Dependents successfully updated.");
                                 break;
                             case 8:
-                                printf("\nWhat would you like to change your asset amount?");
+                                printf("\nWhat would you like to change your asset amount to?");
+                                flushInputBuffer();
                                 scanf("%f",&assets);
                                 sleep(2);
                                 printf("\nThe asset amount has been updated successfully!");
                                 break;
                             case 9:
                                 printf("\nWhat would you like to change your loan amount to?\n");
+                                flushInputBuffer();
                                 scanf("%.2f",loan_amount);
                                 sleep(2);
                                 printf("\nThe loan amount has been updated successfully!\n");
                                 break;
                             case 14:
                                 printf("\nCancel\n");
+                                fclose(Rs1);
                                 exit(0);
                                 break;
                             default:
