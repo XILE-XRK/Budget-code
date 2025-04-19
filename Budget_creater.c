@@ -15,8 +15,8 @@ int main() {
     char passave[INFOLENGTH] = {};
     char confir[INFOLENGTH] = {};
     char temploc[1888] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,car_payment = 0,Emergency_Fund = 1000,zila = 0;
-    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0;
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,car_payment = 0,zila = 0;
+    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -224,28 +224,40 @@ int main() {
                         scanf("%f",&groceries);
                         printf("\nEnter monthly gas expenses:\n");
                         scanf("%f",&gas);
+                        printf("\nEnter your monthly subscription payments:\n");
+                        scanf("%f",&subserv);
+                        printf("\nEnter your monthly medical payments:\n");
+                        scanf("%f",&medical);
+                        printf("\nEnter your Emergency Fund");
+                        scanf("%f",&Emergency_Fund);
+                        //End of information gathering stage
+
 
                         int ija = 0;
-                        left_over_income = calculate_remaining_balance(income2,expenses1,total_loan,car_payment,Emergency_Fund)+dependents*500+groceries*12+gas * 12;
+                        left_over_income = calculate_remaining_balance(income2,expenses1,total_loan,car_payment,Emergency_Fund,dependents,groceries,gas,medical)+dependents;
                         printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.",left_over_income);
                         printf("\nPrinting your information in your file.");
                                fprintf(Rs1, "\n+---------------------+---------------+\n");
-                               fprintf(Rs1, "| Category            | Value         |\n");
-                               fprintf(Rs1, "+---------------------+---------------+\n");
-                               fprintf(Rs1, "| Income post tax     | %13.2f |\n", income2);
-                               fprintf(Rs1, "| Total Loans         | %13.2f |\n", loan_amount);
-                               fprintf(Rs1, "| Utilities (Annual)  | %13.2f |\n", util * 12);
-                               fprintf(Rs1, "| Dependents          | %13d |\n", dependents);
-                               fprintf(Rs1, "| Total Assets        | %13.2f |\n", assets);
-                               fprintf(Rs1, "| Total Expenses      | %13.2f |\n", expenses1);
-                               fprintf(Rs1, "| Emergency Fund      | %13.2f |\n", Emergency_Fund);
-                               fprintf(Rs1, "| Grocery Bill        | %13.2f |\n", groceries * 12);
-                               fprintf(Rs1, "| Gas Bill            | %13.2f |\n", gas * 12);
-                               fprintf(Rs1, "+---------------------+---------------+\n");
-                               fprintf(Rs1, "| Money Remaining     | %13.2f |\n",left_over_income);
+                               fprintf(Rs1, "| Category             | Value         |\n");
+                               fprintf(Rs1, "+----------------------+---------------+\n");
+                               fprintf(Rs1, "| Income post tax      | %13.2f |\n", income2);
+                               fprintf(Rs1, "| Total Loans          | %13.2f |\n", loan_amount);
+                               fprintf(Rs1, "| Utilities (Annual)   | %13.2f |\n", util * 12);
+                               fprintf(Rs1, "| Dependents           | %13d |\n", dependents);
+                               fprintf(Rs1, "| Total Assets         | %13.2f |\n", assets);
+                               fprintf(Rs1, "| Total Expenses       | %13.2f |\n", expenses1);
+                               fprintf(Rs1, "| Emergency Fund       | %13.2f |\n", Emergency_Fund);
+                               fprintf(Rs1, "| Grocery Bill         | %13.2f |\n", groceries * 12);
+                               fprintf(Rs1, "| Gas Bill             | %13.2f |\n", gas * 12);
+                               fprintf(Rs1, "| Monthly subscriptions| %13.2f |\n", subserv * 12);
+                               fprintf(Rs1, "| Monthly medical Bill | %13.2f |\n", medical * 12);
+                               fprintf(Rs1, "+----------------------+---------------+\n");
+                               fprintf(Rs1, "| Money Remaining      | %13.2f |\n",left_over_income);
+                               fprintf(Rs1, "+----------------------+---------------+\n");
                                fclose(Rs1);
                                printf("\nExiting");
                                sleep(2);
+                               budgetadvise(usrname,income2,left_over_income,loan_amount,util,dependents,assets,expenses1,Emergency_Fund,groceries,gas,subserv,medical);
                                exit(0);
                         }
                         
@@ -260,6 +272,7 @@ int main() {
                             scanf("%s",confir);
                         }
                         break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 case 1:
                 // Skip the password
                 fclose(Rs1);
@@ -304,7 +317,7 @@ int main() {
                             case 5:
                                 printf("\n What is the new income value you would like to use?\n");
                                 flushInputBuffer();
-                                scanf("%f",&income2);////////////////////////////////////////////////////////////////////
+                                scanf("%f",&income2);
                                 sleep(2);
                                 printf("Income Updated");
                                 break;
@@ -340,7 +353,43 @@ int main() {
                                 printf("\nAre you finished making changes?");
                                 scanf("%s",confir);
                                 if(strncmp(confir,"Yes",3)==0||strncmp(confir,"yes",3)==0){
+                                    fclose(Rs1);
+                                    Rs1 = fopen(usrname,"r");
+                                    if(Rs1==NULL)
+                                    {
+                                        printf("Fatal error 226");
+                                    }
+                                    fgets(passave, sizeof(passave), Rs1);
+                                    if (fgets(passave, sizeof(passave), Rs1) == NULL) {
+                                        printf("Error: Unable to read password line\n");
+                                        fclose(Rs1);
+                                        exit(1);
+                                    }
+                                    fclose(Rs1);
+                                    Rs1 = fopen(usrname,"w");
+                                    fprintf(Rs1,"%s\n",passave);
                                     printf("\nChanges complete");
+                                    printf("\nPrinting your information\n");
+                                    printLoop();
+                                    fprintf(Rs1, "\n+---------------------+---------------+\n");
+                                    fprintf(Rs1, "| Category             | Value         |\n");
+                                    fprintf(Rs1, "+----------------------+---------------+\n");
+                                    fprintf(Rs1, "| Income post tax      | %13.2f |\n", income2);
+                                    fprintf(Rs1, "| Total Loans          | %13.2f |\n", loan_amount);
+                                    fprintf(Rs1, "| Utilities (Annual)   | %13.2f |\n", util * 12);
+                                    fprintf(Rs1, "| Dependents           | %13d |\n", dependents);
+                                    fprintf(Rs1, "| Total Assets         | %13.2f |\n", assets);
+                                    fprintf(Rs1, "| Total Expenses       | %13.2f |\n", expenses1);
+                                    fprintf(Rs1, "| Emergency Fund       | %13.2f |\n", Emergency_Fund);
+                                    fprintf(Rs1, "| Grocery Bill         | %13.2f |\n", groceries * 12);
+                                    fprintf(Rs1, "| Gas Bill             | %13.2f |\n", gas * 12);
+                                    fprintf(Rs1, "| Monthly subscriptions| %13.2f |\n", subserv * 12);
+                                    fprintf(Rs1, "| Monthly medical Bill | %13.2f |\n", medical * 12);
+                                    fprintf(Rs1, "+----------------------+---------------+\n");
+                                    fprintf(Rs1, "| Money Remaining      | %13.2f |\n",left_over_income);
+                                    fprintf(Rs1, "+----------------------+---------------+\n");
+                                    fclose(Rs1);
+                                    budgetadvise(usrname,income2,left_over_income,loan_amount,util,dependents,assets,expenses1,Emergency_Fund,groceries,gas,subserv,medical);
                                     zila++;
                                 }
                                 else{
@@ -359,20 +408,24 @@ int main() {
                     }
                     }while(option_x!=14||zila==0);// add print function information here
                     fprintf(Rs1, "\n+---------------------+---------------+\n");
-                    fprintf(Rs1, "| Category            | Value         |\n");
-                    fprintf(Rs1, "+---------------------+---------------+\n");
-                    fprintf(Rs1, "| Income              | %13.2f |\n", income2);
-                    fprintf(Rs1, "| Total Loans         | %13.2f |\n", loan_amount);
-                    fprintf(Rs1, "| Utilities (Annual)  | %13.2f |\n", util * 12);
-                    fprintf(Rs1, "| Dependents          | %13d  |\n", dependents);
-                    fprintf(Rs1, "| Total Assets        | %13.2f |\n", assets);
-                    fprintf(Rs1, "| Total Expenses      | %13.2f |\n", expenses1);
-                    fprintf(Rs1, "| Emergency Fund      | %13.2f |\n", Emergency_Fund);
-                    fprintf(Rs1, "| Grocery Bill        | %13.2f |\n", groceries * 12);
-                    fprintf(Rs1, "| Gas Bill            | %13.2f |\n", gas * 12);
-                    fprintf(Rs1, "+---------------------+---------------+\n");
-                    fprintf(Rs1, "| Money Remaining     | %13.2f |\n",left_over_income);
-
+                    fprintf(Rs1, "| Category             | Value         |\n");
+                    fprintf(Rs1, "+----------------------+---------------+\n");
+                    fprintf(Rs1, "| Income               | %13.2f |\n", income2);
+                    fprintf(Rs1, "| Total Loans          | %13.2f |\n", loan_amount);
+                    fprintf(Rs1, "| Utilities (Annual)   | %13.2f |\n", util * 12);
+                    fprintf(Rs1, "| Dependents           | %13d  |\n", dependents);
+                    fprintf(Rs1, "| Total Assets         | %13.2f |\n", assets);
+                    fprintf(Rs1, "| Total Expenses       | %13.2f |\n", expenses1);
+                    fprintf(Rs1, "| Emergency Fund       | %13.2f |\n", Emergency_Fund);
+                    fprintf(Rs1, "| Grocery Bill         | %13.2f |\n", groceries * 12);
+                    fprintf(Rs1, "| Gas Bill             | %13.2f |\n", gas * 12);
+                    fprintf(Rs1, "| Monthly Subscriptions| %13.2f |\n", subserv * 12);
+                    fprintf(Rs1, "| Monthly Medical Bill | %13.2f |\n", medical * 12);
+                    fprintf(Rs1, "+----------------------+---------------+\n");
+                    fprintf(Rs1, "| Money Remaining      | %13.2f |\n",left_over_income);
+                    fprintf(Rs1, "+----------------------+---------------+\n");
+                    fclose(Rs1);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 case 2:
                     printf("\n\nClearing your budget\n");
                     printLoop();
