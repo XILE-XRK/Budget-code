@@ -420,6 +420,7 @@ int main() {
                     //---------------------Utilize entire file reading
 
                     // Skip the first line
+                    fgets(passave, sizeof(passave), Usr2);
                     if (fgets(line, sizeof(line), Rs2) == NULL) {
                         printf("File is empty or error reading.\n");
                     }
