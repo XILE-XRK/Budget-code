@@ -15,8 +15,8 @@ int main() {
     char passave[INFOLENGTH] = {};
     char confir[INFOLENGTH] = {};
     char temploc[1888] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,car_payment = 0,zila = 0;
-    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000;
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
+    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -24,6 +24,7 @@ int main() {
     // Ask if the user is new or returning
     printf("\nAre you a returning user. or have you recently created an account? (yes/no): ");
     scanf("%s", usrstat);
+    flushInputBuffer();
     while(stat==0){
 
     if (strcmp(usrstat,"Yes")==0||strcmp(usrstat,"yes")==0) {//compares the user response to the ascii codes. Use Strcmp and string arrays instead
@@ -31,8 +32,8 @@ int main() {
         printf("\n\nWelcome back!\n\n");
 
         printf("Enter username: ");
-        scanf("%19s",usrname);
-        //flushInputBuffer();
+        fgets(usrname,sizeof(usrname),stdin);
+        usrname[strcspn(usrname, "\n")] = '\0';
         FILE *Usr1 = fopen(usrname, "r");
         while(ilios==0){
 
@@ -40,7 +41,6 @@ int main() {
             if (Usr1 == NULL) {
                 printf("Username not recognized. Please try again or create a new account. Enter Q to exit\n");
                 printf("You have %d attempt(s) left\n",3-ZTX);
-                flushInputBuffer();
                 printf("Enter username: ");
                 fgets(usrname,sizeof(usrname),stdin);
                 usrname[strcspn(usrname, "\n")] = '\0';
@@ -62,12 +62,14 @@ int main() {
 
 
             while (attempts < 3) {
-                flushInputBuffer();
                 printf("Enter password: ");
-                scanf("%19s", paswrd);
-
+                //scanf("%19s", paswrd);
+                fgets(paswrd,sizeof(paswrd),stdin);
+                paswrd[strcspn(paswrd, "\n")] = '\0';
                 // Read the stored password from file
                 fscanf(Usr1, "%19s", paswrd2ndcheck);
+                //crucial change
+                flushInputBuffer();
                 fclose(Usr1); // Close file after reading
 
                 if (strcmp(paswrd, paswrd2ndcheck) == 0) {
@@ -99,8 +101,9 @@ int main() {
         printf("Let's create your account.\n");
 
         printf("Enter a username (max 19 characters): ");
-        scanf("%19s",usrname);
-        flushInputBuffer();
+        //scanf("%19s",usrname);
+        fgets(usrname,sizeof(usrname),stdin);
+        usrname[strcspn(usrname, "\n")] = '\0';
 
             FILE *Usr = fopen(usrname, "w");
         if (Usr == NULL) {
@@ -109,8 +112,8 @@ int main() {
             exit(0);
             }
 
-            printf("Enter your password: ");
-            scanf("%19s", paswrd);
+            fgets(paswrd,sizeof(paswrd),stdin);
+            paswrd[strcspn(paswrd, "\n")] = '\0';
 
             fprintf(Usr, "%s\n", paswrd);
             fclose(Usr);//Get rid of in order to continue working with the code later.
@@ -121,8 +124,8 @@ int main() {
         }
     else {
         printf("\nInvalid input. Please restart the program and enter 'Yes' or 'No'.\n");
-        flushInputBuffer();
         scanf("%s",&usrstat);
+        flushInputBuffer();
 
         }
     }
@@ -144,6 +147,7 @@ int main() {
                     while(rs==0){
                         printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process?\nYes/No:\n");
                         scanf("%s",confir);
+                        flushInputBuffer();
                         if(strcmp(confir,"Yes")==0||strcmp(confir,"yes")== 0||strcmp(confir,"YES")==0||strcmp(confir,"YEs")==0||strcmp(confir,"yEs")==0||strcmp(confir,"yeS")==0){
                         while (getchar() != '\n');
                         FILE *Usr1 = fopen(usrname, "r");
@@ -175,12 +179,12 @@ int main() {
                                 rs = 0;
                                 printf("\nHow many payments of what amount do you have left on your vehicle\n");
                                 printf("\nEnter the monthly car payment.\n");
-                                scanf("%.2f",&carpay);
+                                scanf("%f",&carpay);
                                 flushInputBuffer();
                                 printf("\nEnter the amount of months left to pay off the vehicle.\n");
                                 scanf("%d",&carpaymonths);
                                 flushInputBuffer();
-                                float car_payment = calculate_total_car_loan(carpay,carpaymonths);////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                car_payment = calculate_total_car_loan(carpay,carpaymonths);////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 rs+=1;                                          ////////
                             }
                             else if(strcmp(confir,"No")==0||strcmp(confir,"no")== 0||strcmp(confir,"NO")==0||strcmp(confir,"nO")==0||strcmp(confir,"n")==0||strcmp(confir,"N")==0)
@@ -192,6 +196,7 @@ int main() {
                             {
                                 printf("\nInvalid input, Try again.\n");
                                 scanf("%s",confir);
+                                flushInputBuffer();///////////////
                             }
 
                         }
@@ -270,6 +275,7 @@ int main() {
                         {
                             printf("\nInvalid input, Try again.\n");
                             scanf("%s",confir);
+                            flushInputBuffer();
                         }
                         break;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
