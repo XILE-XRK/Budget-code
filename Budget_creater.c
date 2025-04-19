@@ -60,39 +60,35 @@ int main() {
             }
         }
 
-            
-            while (attempts < 3) {
-                printf("Enter password: ");
-                //scanf("%19s", paswrd);
-                fgets(paswrd,sizeof(paswrd),stdin);
-                paswrd[strcspn(paswrd, "\n")] = '\0';
-                // Read the stored password from file
-                fscanf(Usr1, "%19s", paswrd2ndcheck);
-                //crucial change
-                flushInputBuffer();
-                fclose(Usr1); // Close file after reading
-
-                if (strcmp(paswrd, paswrd2ndcheck) == 0) {
-                    printf("\nPassword correct. Welcome!\n");
-                    ilios = 1;
-                    stat=1;
-                    break;
-                } else {
-                    printf("\nIncorrect password. Attempts remaining: %d\n", 2 - attempts);
-                    attempts++;
-                    Usr1 = fopen(usrname, "r"); // Reopen file for next attempt
-                    if(attempts == 3){
-                        printf("Too many attempts.\nTry again later. ");
-                        return 1;
-                    }
-                    if (Usr1 == NULL) {
-                        printf("\nError reopening user file.\n");
-                        ilios = 2;
-                    }
-
+        while (attempts < 3) {
+            printf("Enter password: ");
+            fgets(paswrd, sizeof(paswrd), stdin);
+            paswrd[strcspn(paswrd, "\n")] = '\0';
+        
+            fscanf(Usr1, "%19s", paswrd2ndcheck); // Load the saved password
+            //flushInputBuffer(); // Clean up any trailing characters
+            fclose(Usr1);
+        
+            if (strcmp(paswrd, paswrd2ndcheck) == 0) {
+                printf("\nPassword correct. Welcome!\n");
+                ilios = 1;
+                stat = 1;
+                break;
+            } else {
+                printf("\nIncorrect password. Attempts remaining: %d\n", 2 - attempts);
+                attempts++;
+                if (attempts == 3) {
+                    printf("Too many attempts.\nTry again later.");
+                    return 1;
                 }
-                fclose(Usr1);
+                Usr1 = fopen(usrname, "r");
+                if (Usr1 == NULL) {
+                    printf("\nError reopening user file.\n");
+                    ilios = 2;
+                }
             }
+        }
+        
         }
     }
 
@@ -103,7 +99,7 @@ int main() {
             exit(1);
         }
         // New user account creation
-        printf("Let's create your account.\n");
+        printf("\nLet's create your account.\n");
 
         printf("Enter a username (max 19 characters): ");
         //scanf("%19s",usrname);
@@ -116,7 +112,7 @@ int main() {
             ilios=2;
             exit(0);
             }
-
+            printf("\nEnter a password:\n");
             fgets(paswrd,sizeof(paswrd),stdin);
             paswrd[strcspn(paswrd, "\n")] = '\0';
 
@@ -382,7 +378,7 @@ int main() {
                                     printf("\nChanges complete");
                                     printf("\nPrinting your information\n");
                                     printLoop();
-                                    fprintf(Rs1, "\n+---------------------+---------------+\n");
+                                    fprintf(Rs1, "\n+----------------------+---------------+\n");
                                     fprintf(Rs1, "| Category             | Value         |\n");
                                     fprintf(Rs1, "+----------------------+---------------+\n");
                                     fprintf(Rs1, "| Income post tax      | %13.2f |\n", income2);
@@ -418,7 +414,7 @@ int main() {
                                 //Make sure to add an exit case
                     }
                     }while(option_x!=14||zila==0);// add print function information here
-                    fprintf(Rs1, "\n+---------------------+---------------+\n");
+                    fprintf(Rs1, "\n+----------------------+---------------+\n");
                     fprintf(Rs1, "| Category             | Value         |\n");
                     fprintf(Rs1, "+----------------------+---------------+\n");
                     fprintf(Rs1, "| Income               | %13.2f |\n", income2);
