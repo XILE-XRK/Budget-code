@@ -60,7 +60,7 @@ int main() {
             }
         }
 
-
+            
             while (attempts < 3) {
                 printf("Enter password: ");
                 //scanf("%19s", paswrd);
@@ -97,6 +97,11 @@ int main() {
     }
 
     else if (strcmp(usrstat,"No")==0||strcmp(usrstat,"no")==0) {
+        //Checks to see if a username already exist or not.
+        if (access(usrname, F_OK) != -1) {
+            printf("\nThat username already exists. Please restart and choose a new one.\n");
+            exit(1);
+        }
         // New user account creation
         printf("Let's create your account.\n");
 
