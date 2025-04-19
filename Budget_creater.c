@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "BCF.c"
-#define INFOLENGTH 20
+#define INFOLENGTH 60
 void printLoop();
 void flushInputBuffer(void);
 int main() {
@@ -291,25 +291,6 @@ int main() {
 
                 if (!hasData) {
                     printf("\nERROR 6575\nYou have no information to update\n");
-                    printf("\nPrinting Current information\n");
-                    printLoop();
-                    fprintf(Rs1, "\n+---------------------+---------------+\n");
-                    fprintf(Rs1, "| Category            | Value         |\n");
-                    fprintf(Rs1, "+---------------------+---------------+\n");
-                    fprintf(Rs1, "| Income post tax     | %13.2f |\n", income2);
-                    fprintf(Rs1, "| Total Loans         | %13.2f |\n", loan_amount);
-                    fprintf(Rs1, "| Utilities (Annual)  | %13.2f |\n", util * 12);
-                    fprintf(Rs1, "| Dependents          | %13d  |\n", dependents);
-                    fprintf(Rs1, "| Total Assets        | %13.2f |\n", assets);
-                    fprintf(Rs1, "| Total Expenses      | %13.2f |\n", expenses1);
-                    fprintf(Rs1, "| Emergency Fund      | %13.2f |\n", Emergency_Fund);
-                    fprintf(Rs1, "| Grocery Bill        | %13.2f |\n", groceries * 12);
-                    fprintf(Rs1, "| Gas Bill            | %13.2f |\n", gas * 12);
-                    fprintf(Rs1, "+---------------------+---------------+\n");
-                    fprintf(Rs1, "| Money Remaining     | %13.2f |\n",left_over_income);
-                    sleep(1);
-                    printf("\nExiting\n");
-                    sleep(2);
                     fclose(Rs1);
                     exit(0);
                 }
@@ -413,24 +394,31 @@ int main() {
                     fclose(Usr2);
                     break;
                 case 3:
-                    printf("\nPrinting your file.");
-                    FILE *Rs2 = fopen(usrname, "r");
-                    printf("\n#");
-                    printLoop();
-                    //---------------------Utilize entire file reading
-
-                    // Skip the first line
-                    fgets(passave, sizeof(passave), Usr2);
-                    if (fgets(line, sizeof(line), Rs2) == NULL) {
-                        printf("File is empty or error reading.\n");
-                    }
-
+                FILE *Rs2 = fopen(usrname, "r");
+                //---------------------Utilize entire file reading
+                
+                // Skip the first line (password)
+                fgets(passave, sizeof(passave), Rs2);
+                
+                printf("\nPrinting your file.");
+                printLoop();
+                
+                // Check if the file has remaining content
+                if (fgets(line, sizeof(line), Rs2) == NULL) {
+                    printf("File is empty or error reading.\n");
+                } else {
+                    // Print the first read line
+                    printf("%s", line);
+                
                     // Print the remaining lines
                     while (fgets(line, sizeof(line), Rs2) != NULL) {
                         printf("%s", line);
                     }
-                    fclose(Rs2);
-                    break;
+                }
+                
+                fclose(Rs2);
+                break;
+                
                 case 4:
                     printf("\nEXITING!");
                     exit(0);
