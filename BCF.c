@@ -160,3 +160,17 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     }
     fclose(Rdv);
 }
+void flushInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+void printLoop(){
+    int art =0;
+    printf("\n");
+    while(art<20)
+    {
+        printf("#");
+        sleep(1);
+        art++;
+    }
+    }
