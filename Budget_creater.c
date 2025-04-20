@@ -369,7 +369,7 @@ int main() {
                 Rs1 = fopen(usrname,"a");
                     do{
                         printf("\nWhat information would you like to update?\n");
-                        printf("5 = Update income\n6 = Update expenses\n7 = Update Dependants\n8 = Update Assets\n9 = Update Loan Amount\n10 = Update Emergency Fund\n11 = Update Grocery Bill\n12 = Update Gas Bill\n13 = Update Monthly Subscriptions\n14 = Update Monthly Medical Bill\n15 = Update Monthly Insurance Bill\n16 = Update Mortgage Amount\n17 = Save Changes\n18 = Exit\n");
+                        printf("5  = Update income\n\n6  = Update expenses\n\n7  = Update Dependants\n\n8  = Update Assets\n\n9  = Update Loan Amount\n\n10 = Update Emergency Fund\n\n11 = Update Grocery Bill\n\n12 = Update Gas Bill\n\n13 = Update Monthly Subscriptions\n\n14 = Update Monthly Medical Bill\n\n15 = Update Monthly Insurance Bill\n\n16 = Update Mortgage Amount\n\n\n17 = Save Changes\n\n\n18 = Exit\n");
                         scanf("%d",&option_x);
                         switch(option_x){
                             case 5:
@@ -384,20 +384,20 @@ int main() {
                                 flushInputBuffer();
                                 scanf("%f",&expenses1);
                                 sleep(2);
-                                printf("\nExpenses Updated\n");
+                                printf("\nExpenses Successfully Updated\n");
                                 break;
                             case 7:
                                 printf("What would you like to change your dependent count to?\n");
                                 flushInputBuffer();
                                 scanf("%d",&dependents);
                                 sleep(2);
-                                printf("Dependents successfully updated.");
+                                printf("Dependents successfully updated.\n");
                                 break;
                             case 8:
-                                printf("\nWhat would you like to change your asset amount to?");
+                                printf("\nWhat would you like to change your asset amount to?\n");
                                 scanf("%f",&assets);
                                 sleep(2);
-                                printf("\nThe asset amount has been updated successfully!");
+                                printf("\nThe asset amount has been updated successfully!\n");
                                 break;
                             case 9:
                                 printf("\nWhat would you like to change your loan amount to?\n");
@@ -415,7 +415,7 @@ int main() {
                                 printf("\nWhat would you like to update your Monthly grocery amount to?\n");
                                 scanf("%f",&groceries);
                                 sleep(2);
-                                printf("\nThe Grocery amount has been updated successfully\n");
+                                printf("\nMonthly Grocery Bill updated successfully\n");
                                 break;
                             case 12:
                                 printf("\nWhat would you like to update your Monthly gas bill to?\n");
@@ -427,10 +427,26 @@ int main() {
                                 printf("\nWhat would you like to update your Monthly Subscriptions to?\n");
                                 scanf("%f",&subserv);
                                 sleep(2);
-                                printf("\nMonthly Subscriptions updated\n");
+                                printf("\nMonthly Subscriptions updated successfully\n");
                                 break;
-
-
+                            case 14:
+                                printf("\nWhat would you like to update your Monthly Medical Bill to?\n");
+                                scanf("%f",&medical);
+                                sleep(2);
+                                printf("\nMonthly Medical Bills updated sucessfully\n");
+                                break;
+                            case 15:
+                                printf("\nWhat would you like to update your Monthly Insurance Bill to?\n");
+                                scanf("%f",&insurance);
+                                sleep(2);
+                                printf("\nMonthly Insurance Bill updated successfully\n");
+                                break;
+                            case 16:
+                                printf("\nWhat would you like your Monthly Mortgage Bill to be updated to?\n");
+                                scanf("%f",&mortgage);
+                                sleep(2);
+                                printf("\nMonthly Mortgage Bill updated successfully\n");
+                                break;
                             case 17:
                                 printf("\nAre you finished making changes?(Yes/No)\n");
                                 scanf("%s",confir);
@@ -489,7 +505,6 @@ int main() {
                             default:
                                 printf("\n\nERROR CODE 259\nInvalid option, Please select a valid option");
                                 break;
-                                //Make sure to add an exit case
                     }
                     }while(option_x!=14||zila==0);// add print function information here
                     fprintf(Rs1, "\n+-----------------------+---------------+\n");
