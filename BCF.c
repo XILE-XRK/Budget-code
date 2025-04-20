@@ -57,7 +57,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     else if(dependents>0&&Emergency_Fund<=1000)
     {
         fprintf(Rdv,"\nYou have %.2f saved for emergencies and %d dependent(s), this isn't recommended because when something happens when you least expect it your emergency fund of %.2f won't be sufficient for what you would likely need to cover these emergencies.\nWe recommend an Emergency fund exceeding $3,500 for %d dependents",Emergency_Fund,dependents,Emergency_Fund,dependents);
-        Emergency_Fund = 4000;
+        Emergency_Fund = 3500;
     }
     else{
         fprintf(Rdv,"\nIt seems you have a sufficient amount of money saved up in your emergency fund for the %d dependent(s) you have",dependents);
