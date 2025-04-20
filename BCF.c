@@ -1,152 +1,626 @@
-// Sum of car loan
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-float calculate_total_car_loan(float car_payment, int months_left) {
-    return car_payment * months_left;
-}
+#include "BCF.c"
+#define INFOLENGTH 60
+void printLoop();
+void flushInputBuffer(void);
+int main() {
+    char usrstat[INFOLENGTH] = {};
+    char usrname[INFOLENGTH] = {};
+    char paswrd[INFOLENGTH] = {};
+    char paswrd2ndcheck[INFOLENGTH] = {};
+    char line[1024];
+    char passave[INFOLENGTH] = {};
+    char confir[INFOLENGTH] = {};
+    char temploc[1888] = {};
+    int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
+    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount = 0,total_loan = 0,util = 0,carpay = 0,insurance = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0,mortgage = 0;
 
-// Combine existing loan and car loan
-float calculate_total_loans(float existing_loan, float car_loan) {
-    return existing_loan + car_loan;
-}
-float calculate_remaining_balance(float income, float expenses, float total_loans,
-    float car_payment, int Emergency_Fund, int dependents,
-    float groceries, float gas, float medical,float insurance,float mortgage) {
-float total_expenses = expenses + total_loans + car_payment + Emergency_Fund +
-(groceries * 12) + (gas * 12) + (medical * 12)+(insurance*12)+(mortgage*12);
-return income - total_expenses;
-}
+    printf("Welcome to the budget app.\n");
+    printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
 
-// Expense as a percentage of income
-float calculate_expense_percentage(float income, float expenses) {
-    if (income == 0) return 0;
-    return (expenses / income) * 100;
-}
-void budgetadvise(char usrname[],float income2,float left_over_income,float loan_amount,float util,int dependents,float assets,float expenses1,float Emergency_Fund,float groceries,float gas, float subserv/*Subscription services*/,float medical,float insurance,float mortgage){
-    char il[100] = " Budget Recommendations";
-    int debt_payment = 0;
-    float savings = 0;
-    /*Recalculate medical,gas,groceries,subscription services. by multiplying by 12*/
-    strcat(usrname,il);
-    FILE *Rdv = fopen(usrname,"w");
-    if(Rdv==NULL){
-        printf("\nFATAL ERROR\nFile /%s/ failed to open\n",usrname);
-    }
-    int inda = 0;
-    float expense_limit = income2*.26;
-    if(expense_limit<=expenses1){
-        inda++;
-    }
-    else{
-        inda = 0;
-    }
-    fprintf(Rdv,"Considering all of the information you have filled in for the budget app, Here is a plan, tailor made for you\n");
-    fprintf(Rdv,"\nAfter subtracting all of the expenses loans etc that was entered, you have $%.2f left over ",left_over_income);
-    if(inda == 1){
-        fprintf(Rdv,"\nConsidering you are spending over the what we recommend you allocate towards spending, which is around 26%% its recommended you start allocating $%.2f to expenses instead",expense_limit);
-    }
-    else if(inda ==0)
-    {
-        fprintf(Rdv,"\nConsidering you are spending under or exactly at the percentage of spending that we recommend which is 26%%, your spending amount of $%.2f seems in line with what's recommended\n",expenses1);
-    }
-    if((dependents==0)&&(Emergency_Fund>=1000))
-    {
-        fprintf(Rdv,"\nBased on the statement that you have zero dependents its advised that you continue to keep the $%.2f dollars or above that you have saved for emergencies.",Emergency_Fund);
-    }
-    else if(dependents>0&&Emergency_Fund<=1000)
-    {
-        fprintf(Rdv,"\nYou have %.2f saved for emergencies and %d dependent(s), this isn't recommended because when something happens when you least expect it your emergency fund of %.2f won't be sufficient for what you would likely need to cover these emergencies.\nWe recommend an Emergency fund exceeding $3,500 for %d dependents",Emergency_Fund,dependents,Emergency_Fund,dependents);
-        Emergency_Fund = 3500;
-    }
-    else{
-        fprintf(Rdv,"\nIt seems you have a sufficient amount of money saved up in your emergency fund for the %d dependent(s) you have",dependents);
-    }
-    if(income2<loan_amount){
-        fprintf(Rdv,"\nMajor problem here, You are in more debt than money you make a year, You'll need to start allocating at least 15%% of your income to paying off this debt starting with the smallest current loan. That puts you at %.2f payments per month towards this debt.",(income2*.15)/12);
-        debt_payment = (income2*.15)/12;
-        fprintf(Rdv,"\nSince this is the case, you will have to go without any fun expenses such as eating out and more until we get this situation under control. Your expenses should be as close to 0 as you can get them.");
-        expenses1 = expenses1*0;
-    }
-    else if(income2*.5<loan_amount){
-        fprintf(Rdv,"\nYour total loan amount seems to be more that 50%% of your income, which is an issue, its not as bad as you having more loans than your income, but it's not ideal. We can manage by dedicating, 17%% of your yearly income which is %.2f to trying to pay off this debt. If the debt is resulting form car payments.",income2*.17);
-        fprintf(Rdv,"Then I'd recommend you trade in that car for a cheaper car that you can afford, as long as you have something that gets you from point a to point b That should be good enough to work.");
-        debt_payment = (income2*.17)/12;
-    }
-    else if((income2*.5>loan_amount)&&loan_amount>0)
-    {
-        fprintf(Rdv,"\nYour total loan amount seems to be under 50%% of your total income which is good. But its not zero, so lets get that paid off.\nI recommend you start allocating 20%% of your income to paying this debt off, as the close you get to being debt free, the more you will be able to dedicate some of your income to saving");
-        debt_payment = (income2*.20)/12;//calculates the amount you should put towards debt monthly 
-    }
-    else{
-        fprintf(Rdv,"\nSince it seems you are on the right track and have no debt to speak of I suggest you keep up the good work.");
-        debt_payment = 0;
-    }
-    if (((income2*.15)>=groceries*12)&&dependents<=1)
-    {
-        fprintf(Rdv,"\nFor Groceries, your spending is reasonable considering how many dependents you have. Keep up the good work.");
-    }
-    else if(((income2*.15)<=groceries*12)&&dependents<=1)
-    {
-        fprintf(Rdv,"\nYou are spending a little more than necessary for groceries considering you have one dependent but if your spending is under %.2f then it isn't a real issue",income2*.25);
-        groceries = income2*.20;
-    }
-    else if (((income2*.15)<=groceries*12)&&dependents>=1)
-    {
-        fprintf(Rdv,"\nYou are over the recommended spending of 15%% for groceries, but considering you have %d dependents its understandable",dependents);
-        if(groceries*12>(income2*.25)){
-            fprintf(Rdv,"\nEven through you have %d dependents, you shouldn't really be spending over 25 percent of your yearly income on groceries alone, lets try to get that down to 25%%.",dependents);
-            groceries = income2*.25;
+    // Ask if the user is new or returning
+    printf("\nAre you a returning user. or have you recently created an account? (yes/no): ");
+    scanf("%s", usrstat);
+    flushInputBuffer();
+    while(stat==0){
+
+    if (strcmp(usrstat,"Yes")==0||strcmp(usrstat,"yes")==0) {//compares the user response to the ascii codes. Use Strcmp and string arrays instead
+        // Returning user login
+        printf("\n\nWelcome back!\n\n");
+
+        printf("Enter username: ");
+        fgets(usrname,sizeof(usrname),stdin);
+        usrname[strcspn(usrname, "\n")] = '\0';
+        FILE *Usr1 = fopen(usrname, "r");
+        while(ilios==0){
+
+        while (ZTX!=3) {
+            if (Usr1 == NULL) {
+                printf("Username not recognized. Please try again or create a new account. Enter Q to exit\n");
+                printf("You have %d attempt(s) left\n",3-ZTX);
+                printf("Enter username: ");
+                fgets(usrname,sizeof(usrname),stdin);
+                usrname[strcspn(usrname, "\n")] = '\0';
+                if(strncmp(usrname,"Q",1)==0||strncmp(usrname,"q",1)==0)
+                {
+                    printf("\nExiting");
+                    sleep(2);
+                    exit(0);
+                }
+                // Try to reopen with new input
+                Usr1 = fopen(usrname, "r");  // reattempt open
+                ZTX++;
+
+            }
+            else {
+                ZTX=3;  // valid file found
+            }
         }
-    }
-    else if (((income2*.15)>=groceries*12)&&dependents>=1)
-    {
-        fprintf(Rdv,"\nConsidering you have %d dependents and you are not spending over the recommended amount of money per year for 1 dependent, its save to say you and your dependents aren't eating enough, its recommended that with the increasing dependent count that you increase your grocery spending up to 20-25 percent, in your case, we will raise the grocery spending to around that 20%% mark",dependents);
-        groceries = income2*.20;
-        if(groceries*12>(income2*.25)){
-            fprintf(Rdv,"\nEven through you have %d dependents, you shouldn't really be spending over 25 percent of your yearly income on groceries alone, lets try to get that down to 25%%.",dependents);
-            groceries = income2*.25;
-        }
-    }
-    else{
-        fprintf(Rdv,"\nYour spending overall is to much considering its over 15%% of your total income, and it seems like you have no dependents to justify this overspending. Your groceries should go down to 20%% since it seems you'd still would like to be on the higher end of the grocery spending ladder");
-        groceries = income2*.20;
-    }
-    if((income2*.30)<loan_amount)
-    {
-        if(subserv>0)
-        {
-            fprintf(Rdv,"\nYour loan amount is greater than 30 percent of your income, which means we need to start cutting off things in order to pay for these loans, and I have an idea for something that we can cut off. That subscription services, lets go ahead and set those to zero because you don't really need them.");
-            subserv = subserv*0;
-        }
-        else{
-            fprintf(Rdv,"\nGood on you for not having any subscription services while you are in debt, you are one step closer to getting out of debt by having a way to reallocate money towards your debt.");
+
+        while (attempts < 3) {
+            printf("Enter password: ");
+            fgets(paswrd, sizeof(paswrd), stdin);
+            paswrd[strcspn(paswrd, "\n")] = '\0';
+        
+            fscanf(Usr1, "%19s", paswrd2ndcheck); // Load the saved password
+            //flushInputBuffer(); // Clean up any trailing characters
+            fclose(Usr1);
+        
+            if (strcmp(paswrd, paswrd2ndcheck) == 0) {
+                printf("\nPassword correct. Welcome!\n");
+                ilios = 1;
+                stat = 1;
+                break;
+            } else {
+                printf("\nIncorrect password. Attempts remaining: %d\n", 2 - attempts);
+                attempts++;
+                if (attempts == 3) {
+                    printf("Too many attempts.\nTry again later.");
+                    return 1;
+                }
+                Usr1 = fopen(usrname, "r");
+                if (Usr1 == NULL) {
+                    printf("\nError reopening user file.\n");
+                    ilios = 2;
+                }
+            }
         }
         
+        }
     }
-    fprintf(Rdv,"\nYou should be saving around 20%% of your income. So in your case around %.2f",income2*.25);
-    savings = income2*.20;
-    fprintf(Rdv,"Monthly Budget\n");
-    fprintf(Rdv, "\n+---------------------+-----------------+\n");
-    fprintf(Rdv, "| Category             | Value          |\n");
-    fprintf(Rdv, "+----------------------+----------------+\n");
-    fprintf(Rdv, "| Income post tax       | %13.2f |\n", income2);
-    fprintf(Rdv, "| Total Loans           | %13.2f |\n", loan_amount);
-    fprintf(Rdv, "| Utilities (Monthly)   | %13.2f |\n", util);
-    fprintf(Rdv, "| Dependents            | %13d |\n", dependents);
-    fprintf(Rdv, "| Total Assets          | %13.2f |\n", assets);
-    fprintf(Rdv, "| Total Expenses        | %13.2f |\n", expense_limit);
-    fprintf(Rdv, "| Emergency Fund        | %13.2f |\n", Emergency_Fund);
-    fprintf(Rdv, "| Grocery Bill          | %13.2f |\n", groceries);
-    fprintf(Rdv, "| Gas Bill              | %13.2f |\n", gas);
-    fprintf(Rdv, "| Monthly subscriptions | %13.2f |\n", subserv);
-    fprintf(Rdv, "| Monthly Medical Bill  | %13.2f |\n", medical);
-    fprintf(Rdv, "| Savings               | %13.2f |\n", savings);
-    fprintf(Rdv, "| Monthly Insurance Bill| %13.2f |\n", insurance);
-    fprintf(Rdv, "| Monthly Mortgage  Bill| %13.2f |\n", mortgage);
-    fprintf(Rdv, "| Debt payments(Monthly)| %13.2f |\n", debt_payment);
-    fprintf(Rdv, "+----------------------+----------------+\n");
-    fprintf(Rdv, "| Money Remaining       | %13.2f |\n", left_over_income);
-    fprintf(Rdv, "+----------------------+----------------+\n");
-    fclose(Rdv);
+
+    else if (strcmp(usrstat,"No")==0||strcmp(usrstat,"no")==0) {
+        //Checks to see if a username already exist or not.
+        if (access(usrname, F_OK) != -1) {
+            printf("\nThat username already exists. Please restart and choose a new one.\n");
+            exit(1);
+        }
+        // New user account creation
+        printf("\nLet's create your account.\n");
+
+        printf("Enter a username (max 19 characters): ");
+        //scanf("%19s",usrname);
+        fgets(usrname,sizeof(usrname),stdin);
+        usrname[strcspn(usrname, "\n")] = '\0';
+
+            FILE *Usr = fopen(usrname, "w");
+        if (Usr == NULL) {
+            printf("\nError: Failed to create account.\n");
+            ilios=2;
+            exit(0);
+            }
+            printf("\nEnter a password:\n");
+            fgets(paswrd,sizeof(paswrd),stdin);
+            paswrd[strcspn(paswrd, "\n")] = '\0';
+
+            fprintf(Usr, "%s\n", paswrd);
+            fclose(Usr);//Get rid of in order to continue working with the code later.
+
+            printf("\nAccount successfully created! You can now log in.\n");
+            exit(0);
+
+        }
+    else {
+        printf("\nInvalid input. Please restart the program and enter 'Yes' or 'No'.\n");
+        scanf("%s",&usrstat);
+        flushInputBuffer();
+
+        }
+    }
+    if(ilios==1){
+        printf("What actions would you like to perform today?\n");
+        //Change the following menu into a function in order to clean it up and more easily add extra things in the future.
+        printf("\n0 - Create a new budget\n\n1 - Update current budget plan.\n\n2 - Delete current budget plan\n\n3 - Print Your budget\n\n4 - Exit\n\n");//Update current budget plan
+        scanf("%d",&option);
+        printf("\nYou have chosen option %d",option);
+        flushInputBuffer();
+        FILE *Rs1 = fopen(usrname, "a");
+        if(Rs1==NULL)
+        {
+            printf("Error 293\nterminating.");
+            exit(0);
+        }
+        switch(option){
+            case 0:
+            while(rs == 0){
+                // Confirmation loop for sensitive information
+                while(1) {
+                    printf("\nHello, in order to create your new budget plan I will have to collect some sensitive information.\n\nAre you sure you would like to proceed with this process? (Yes/No):\n");
+                    fgets(confir, sizeof(confir), stdin);
+                    confir[strcspn(confir, "\n")] = '\0';
+        
+                    if (strcmp(confir, "Yes") == 0 || strcmp(confir, "yes") == 0 || strcmp(confir, "YES") == 0) {
+                        break; // valid input, continue
+                    } else if (strcmp(confir, "No") == 0 || strcmp(confir, "no") == 0 || strcmp(confir, "NO") == 0) {
+                        printf("I understand that you might not be willing to give up this information and that's perfectly fine.\nHave a nice day.");
+                        fclose(Rs1);
+                        exit(0);
+                    } else {
+                        printf("\nInvalid input, Try again.\n");
+                    }
+                }
+        
+                // Continue collecting budget info
+                FILE *Usr1 = fopen(usrname, "r");
+                if (Usr1 == NULL) {
+                    printf("\nERROR 235\nTerminating");
+                    return 1;
+                }
+                fgets(passave, sizeof(passave), Usr1);
+                fclose(Usr1);
+        
+                FILE *Usr3 = fopen(usrname, "w");
+                if (Usr3 == NULL) {
+                    printf("\nERROR 234");
+                    return 1;
+                }
+                fprintf(Usr3, "%s", passave);
+                fclose(Usr3);
+        
+                printf("\nLet us continue\n");
+        
+                printf("\nEnter the total house yearly income (Without commas):\n");
+                scanf("%f", &income);
+                income2 = income - (income * tax_rate);
+                printf("\nYou entered an income value of %.2f.\n", income);
+        
+                printf("\nDo you currently have any car payments? (Yes/No)\n");
+                scanf(" %s", confir);
+                flushInputBuffer();
+        
+                while(rs == 0){
+                    if (strcmp(confir, "Yes") == 0 || strcmp(confir, "yes") == 0 || strcmp(confir, "Y") == 0 || strcmp(confir, "y") == 0) {
+                        printf("\nHow many payments of what amount do you have left on your vehicle\n");
+                        printf("Enter the monthly car payment:\n");
+                        scanf("%f", &carpay);
+                        flushInputBuffer();
+        
+                        printf("Enter the amount of months left to pay off the vehicle:\n");
+                        scanf("%d", &carpaymonths);
+                        flushInputBuffer();
+        
+                        car_payment = calculate_total_car_loan(carpay, carpaymonths);
+                        rs = 1;
+                    }
+                    else if (strcmp(confir, "No") == 0 || strcmp(confir, "no") == 0 || strcmp(confir, "N") == 0 || strcmp(confir, "n") == 0) {
+                        printf("\nThat's amazing, that's one less payment to worry about.\n");
+                        rs = 1;
+                    }
+                    else {
+                        printf("\nInvalid input, Try again.\n");
+                        scanf(" %s", confir);
+                        flushInputBuffer();
+                    }
+                }
+        
+                printf("\nEnter your current total loan amount:\n");
+                scanf("%f", &loan_amount);
+                total_loan = calculate_total_loans(car_payment, loan_amount);
+        
+                printf("\nEnter approximated amount of monthly utility bills:\n");
+                scanf("%f", &util);
+        
+                printf("\nEnter number of dependents:\n");
+                scanf("%d", &dependents);
+                while(izo == 0){
+                    if(dependents < 0){
+                        printf("\nEnter a positive number:\n");
+                        scanf("%d", &dependents);
+                    } else {
+                        izo++;
+                    }
+                }
+        
+                printf("\nEnter total expenses per month:\n");
+                scanf("%f", &expenses1);
+                expenses1 *= 12;
+        
+                printf("\nEnter your total assets:\n");
+                scanf("%f", &assets);
+        
+                printf("\nEnter monthly grocery bill:\n");
+                scanf("%f", &groceries);
+        
+                printf("\nEnter monthly gas expenses:\n");
+                scanf("%f", &gas);
+        
+                printf("\nEnter your monthly subscription payments:\n");
+                scanf("%f", &subserv);
+        
+                printf("\nEnter your monthly medical payments:\n");
+                scanf("%f", &medical);
+        
+                printf("\nEnter your Emergency Fund:\n");
+                scanf("%f", &Emergency_Fund);
+                printf("\nEnter your monthly insurance bill.\n");
+                scanf("%f",&insurance);
+                printf("\nEnter your monthly mortgage bill.\n");
+                scanf("%f",&mortgage);
+        
+                left_over_income = calculate_remaining_balance(income2, expenses1, total_loan, car_payment, Emergency_Fund, dependents, groceries, gas, medical, insurance, mortgage);
+        
+                printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
+                printf("\nPrinting your information in your file.\n");
+                FILE * NZXT = fopen("budgetignore.txt","w");
+                if(NZXT==NULL){
+                    printf("\nFATAL ERROR 7838");
+                    exit(0);
+                }
+                fprintf(Rs1, "\n+-----------------------+---------------+\n");
+                fprintf(Rs1, "| Category              | Value         |\n");
+                fprintf(Rs1, "+-----------------------+---------------+\n");
+                fprintf(Rs1, "| Income post tax       | %13.2f |\n", income2);
+                fprintf(NZXT,"%.2f",income2);
+                fprintf(Rs1, "| Total Loans           | %13.2f |\n", loan_amount);
+                fprintf(NZXT,"\n%.2f",loan_amount);
+                fprintf(Rs1, "| Utilities (Annual)    | %13.2f |\n", util * 12);
+                fprintf(NZXT,"\n%.2f",util);
+                fprintf(Rs1, "| Dependents            | %13d |\n", dependents);
+                fprintf(NZXT,"\n%d",dependents);
+                fprintf(Rs1, "| Total Assets          | %13.2f |\n", assets);
+                fprintf(NZXT,"\n%.2f",assets);
+                fprintf(Rs1, "| Total Expenses        | %13.2f |\n", expenses1);
+                fprintf(NZXT,"\n%.2f",expenses1);
+                fprintf(Rs1, "| Emergency Fund        | %13.2f |\n", Emergency_Fund);
+                fprintf(NZXT,"\n%.2f",Emergency_Fund);
+                fprintf(Rs1, "| Grocery Bill          | %13.2f |\n", groceries * 12);
+                fprintf(NZXT,"\n%.2f",groceries);
+                fprintf(Rs1, "| Gas Bill              | %13.2f |\n", gas * 12);
+                fprintf(NZXT,"\n%.2f",gas);
+                fprintf(Rs1, "| Monthly subscriptions | %13.2f |\n", subserv * 12);
+                fprintf(NZXT,"\n%.2f",subserv);
+                fprintf(Rs1, "| Monthly Medical Bill  | %13.2f |\n", medical * 12);
+                fprintf(NZXT,"\n%.2f",medical);
+                fprintf(Rs1, "| Monthly Insurance Bill| %13.2f |\n", insurance * 12);
+                fprintf(NZXT,"\n%.2f",insurance);
+                fprintf(Rs1, "| Monthly Mortgage Bill | %13.2f |\n", mortgage * 12);
+                fprintf(NZXT,"\n%.2f",mortgage);
+                fprintf(Rs1, "+-----------------------+---------------+\n");
+                fprintf(Rs1, "| Money Remaining       | %13.2f |\n",left_over_income);
+                fprintf(Rs1, "+-----------------------+---------------+\n");
+                fclose(NZXT);
+                fclose(Rs1);
+                printf("\nExiting\n");
+                sleep(2);
+                budgetadvise(usrname, income2, left_over_income, loan_amount, util, dependents, assets, expenses1, Emergency_Fund, groceries, gas, subserv, medical,insurance,mortgage);
+                exit(0);
+            }
+            break;
+        
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                case 1:
+                // Skip the password
+                fclose(Rs1);
+                Rs1 = fopen(usrname,"r");
+                if(Rs1==NULL){
+                    printf("\nFile opening failed!");
+                    exit(0);
+                }
+                fgets(temploc, sizeof(temploc), Rs1); // Read password line
+
+                int hasData = 0;
+
+                // Read the rest of the file, line by line
+                while (fgets(temploc, sizeof(temploc), Rs1) != NULL) {
+                    // Strip newline
+                    temploc[strcspn(temploc, "\n")] = '\0';
+
+                    // Check if line has any actual data (digits or alphabetic content)
+                    for (int i = 0; temploc[i] != '\0'; i++) {
+                        if ((temploc[i] >= '0' && temploc[i] <= '9') || 
+                            (temploc[i] >= 'A' && temploc[i] <= 'Z') ||
+                            (temploc[i] >= 'a' && temploc[i] <= 'z')) {
+                            hasData = 1;
+                            break;
+                        }
+                    }
+                    if (hasData) break;
+                }
+
+                if (!hasData) {
+                    printf("\nERROR 6575\nYou have no information to update\n");
+                    fclose(Rs1);
+                    exit(0);
+                }
+                fclose(Rs1);
+                FILE *NZXT = fopen("budgetignore.txt","r");
+                if(NZXT==NULL)
+                {
+                    printf("\nFATAL ERROR 3984\nExiting\n");
+                    exit(0);
+                }
+                fscanf(NZXT,"%f",&income2);
+                fscanf(NZXT,"%f",&loan_amount);
+                fscanf(NZXT,"%f",&util);
+                fscanf(NZXT,"%d",&dependents);
+                fscanf(NZXT,"%f",&assets);
+                fscanf(NZXT,"%f",&expenses1);
+                fscanf(NZXT,"%f",&Emergency_Fund);
+                fscanf(NZXT,"%f",&groceries);
+                fscanf(NZXT,"%f",&gas);
+                fscanf(NZXT,"%f",&subserv);
+                fscanf(NZXT,"%f",&medical);
+                fscanf(NZXT,"%f",&insurance);
+                fscanf(NZXT,"%f",&mortgage);
+                fclose(NZXT);
+                Rs1 = fopen(usrname,"a");
+                    do{
+                        printf("\nWhat information would you like to update?\n");
+                        printf("5  = Update income\n\n6  = Update expenses\n\n7  = Update Dependants\n\n8  = Update Assets\n\n9  = Update Loan Amount\n\n10 = Update Emergency Fund\n\n11 = Update Grocery Bill\n\n12 = Update Gas Bill\n\n13 = Update Monthly Subscriptions\n\n14 = Update Monthly Medical Bill\n\n15 = Update Monthly Insurance Bill\n\n16 = Update Mortgage Amount\n\n\n17 = Save Changes\n\n\n18 = Exit\n");
+                        scanf("%d",&option_x);
+                        switch(option_x){
+                            case 5:
+                                printf("\n What is the new income value you would like to use?\n");
+                                flushInputBuffer();
+                                scanf("%f",&income2);
+                                sleep(2);
+                                printf("Income Updated");
+                                break;
+                            case 6:
+                                printf("\nWhat would you like to change your total expenses to?\n");
+                                flushInputBuffer();
+                                scanf("%f",&expenses1);
+                                sleep(2);
+                                printf("\nExpenses Successfully Updated\n");
+                                break;
+                            case 7:
+                                printf("What would you like to change your dependent count to?\n");
+                                flushInputBuffer();
+                                scanf("%d",&dependents);
+                                sleep(2);
+                                printf("Dependents successfully updated.\n");
+                                break;
+                            case 8:
+                                printf("\nWhat would you like to change your asset amount to?\n");
+                                scanf("%f",&assets);
+                                sleep(2);
+                                printf("\nThe asset amount has been updated successfully!\n");
+                                break;
+                            case 9:
+                                printf("\nWhat would you like to change your loan amount to?\n");
+                                scanf("%.2f",&loan_amount);
+                                sleep(2);
+                                printf("\nThe loan amount has been updated successfully!\n");
+                                break;
+                            case 10:
+                                printf("\nWhat would you like to update your Emergency Fund to?\n");
+                                scanf("%f",&Emergency_Fund);
+                                sleep(2);
+                                printf("\nThe Emergency Fund amount has been updated successfully\n");
+                                break;
+                            case 11:
+                                printf("\nWhat would you like to update your Monthly grocery amount to?\n");
+                                scanf("%f",&groceries);
+                                sleep(2);
+                                printf("\nMonthly Grocery Bill updated successfully\n");
+                                break;
+                            case 12:
+                                printf("\nWhat would you like to update your Monthly gas bill to?\n");
+                                scanf("%f",&gas);
+                                sleep(2);
+                                printf("\nMonthly Gas amount updated successfully\n");
+                                break;
+                            case 13:
+                                printf("\nWhat would you like to update your Monthly Subscriptions to?\n");
+                                scanf("%f",&subserv);
+                                sleep(2);
+                                printf("\nMonthly Subscriptions updated successfully\n");
+                                break;
+                            case 14:
+                                printf("\nWhat would you like to update your Monthly Medical Bill to?\n");
+                                scanf("%f",&medical);
+                                sleep(2);
+                                printf("\nMonthly Medical Bills updated sucessfully\n");
+                                break;
+                            case 15:
+                                printf("\nWhat would you like to update your Monthly Insurance Bill to?\n");
+                                scanf("%f",&insurance);
+                                sleep(2);
+                                printf("\nMonthly Insurance Bill updated successfully\n");
+                                break;
+                            case 16:
+                                printf("\nWhat would you like your Monthly Mortgage Bill to be updated to?\n");
+                                scanf("%f",&mortgage);
+                                sleep(2);
+                                printf("\nMonthly Mortgage Bill updated successfully\n");
+                                break;
+                            case 17:
+                                printf("\nAre you finished making changes?(Yes/No)\n");
+                                scanf("%s",confir);
+                                if(strncmp(confir,"Yes",3)==0||strncmp(confir,"yes",3)==0){
+                                    fclose(Rs1);
+                                    Rs1 = fopen(usrname,"r");
+                                    if(Rs1==NULL)
+                                    {
+                                        printf("Fatal error 226");
+                                    }
+                                    fgets(passave, sizeof(passave), Rs1);
+                                    if (fgets(passave, sizeof(passave), Rs1) == NULL) {
+                                        printf("Error: Unable to read password line\n");
+                                        fclose(Rs1);
+                                        exit(1);
+                                    }
+                                    fclose(Rs1);
+                                    left_over_income = calculate_remaining_balance(income2, expenses1, total_loan, car_payment, Emergency_Fund, dependents, groceries, gas, medical, insurance, mortgage);
+                                    Rs1 = fopen(usrname,"w");
+                                    fprintf(Rs1,"%s\n",passave);
+                                    printf("\nChanges complete");
+                                    printf("\nPrinting your information\n");
+                                    printLoop();
+                                    fprintf(Rs1, "\n+-----------------------+---------------+\n");
+                                    fprintf(Rs1, "| Category              | Value         |\n");
+                                    fprintf(Rs1, "+-----------------------+---------------+\n");
+                                    fprintf(Rs1, "| Income post tax       | %13.2f  |\n", income2);
+                                    fprintf(Rs1, "| Total Loans           | %13.2f  |\n", loan_amount);
+                                    fprintf(Rs1, "| Utilities (Annual)    | %13.2f  |\n", util * 12);
+                                    fprintf(Rs1, "| Dependents            | %13d|\n", dependents);
+                                    fprintf(Rs1, "| Total Assets          | %13.2f  |\n", assets);
+                                    fprintf(Rs1, "| Total Expenses        | %13.2f  |\n", expenses1);
+                                    fprintf(Rs1, "| Emergency Fund        | %13.2f  |\n", Emergency_Fund);
+                                    fprintf(Rs1, "| Grocery Bill          | %13.2f  |\n", groceries * 12);
+                                    fprintf(Rs1, "| Gas Bill              | %13.2f  |\n", gas * 12);
+                                    fprintf(Rs1, "| Monthly subscriptions | %13.2f  |\n", subserv * 12);
+                                    fprintf(Rs1, "| Monthly Medical Bill  | %13.2f  |\n", medical * 12);
+                                    fprintf(Rs1, "| Monthly Insurance Bill| %13.2f  |\n", insurance * 12);
+                                    fprintf(Rs1, "| Monthly Mortgage  Bill| %13.2f  |\n", mortgage * 12);
+                                    fprintf(Rs1, "+-----------------------+---------------+\n");
+                                    fprintf(Rs1, "| Money Remaining       | %13.2f  |\n",left_over_income);
+                                    fprintf(Rs1, "+-----------------------+---------------+\n");
+                                    fclose(Rs1);
+                                    budgetadvise(usrname,income2,left_over_income,loan_amount,util,dependents,assets,expenses1,Emergency_Fund,groceries,gas,subserv,medical,insurance,mortgage);
+                                    zila++;
+                                    NZXT = fopen("budgetignore.txt","w");
+                                    if(NZXT==NULL)
+                                    {
+                                        printf("\nFATAL ERROR 3984\nExiting\n");
+                                        exit(0);
+                                    }
+                                    fprintf(NZXT,"%.2f",income2);
+                                    fprintf(NZXT,"\n%.2f",loan_amount);
+                                    fprintf(NZXT,"\n%.2f",util);
+                                    fprintf(NZXT,"\n%d",dependents);
+                                    fprintf(NZXT,"\n%.2f",assets);
+                                    fprintf(NZXT,"\n%.2f",expenses1);
+                                    fprintf(NZXT,"\n%.2f",Emergency_Fund);
+                                    fprintf(NZXT,"\n%.2f",groceries);
+                                    fprintf(NZXT,"\n%.2f",gas);
+                                    fprintf(NZXT,"\n%.2f",subserv);
+                                    fprintf(NZXT,"\n%.2f",medical);
+                                    fprintf(NZXT,"\n%.2f",insurance);
+                                    fprintf(NZXT,"\n%.2f",mortgage);
+                                    fclose(NZXT);
+                                    printf("\nThank you for choosing Us to help you budget. Happy budgeting may great success come to you\nAlways feel free to comeback and update your information for a more up to date plan\n");
+                                    exit(0);
+                                }
+                                else{
+                                    printf("\nEnter 14, to quit, or 10 when you would like to add your changes.");
+                                }
+                                break;
+                            case 18:
+                                printf("\nCancel\n");
+                                fclose(Rs1);
+                                exit(0);
+                                break;
+                            default:
+                                printf("\n\nERROR CODE 259\nInvalid option, Please select a valid option");
+                                break;
+                    }
+                    }while(option_x!=14||zila==0);// add print function information here
+                    fprintf(Rs1,"%s\n",passave);
+                    fprintf(Rs1, "\n+-----------------------+---------------+\n");
+                    fprintf(Rs1, "| Category              | Value         |\n");
+                    fprintf(Rs1, "+-----------------------+---------------+\n");
+                    fprintf(Rs1, "| Income post tax       | %13.2f  |\n", income2);
+                    fprintf(Rs1, "| Total Loans           | %13.2f  |\n", loan_amount);
+                    fprintf(Rs1, "| Utilities (Annual)    | %13.2f  |\n", util * 12);
+                    fprintf(Rs1, "| Dependents            | %13d  |\n", dependents);
+                    fprintf(Rs1, "| Total Assets          | %13.2f  |\n", assets);
+                    fprintf(Rs1, "| Total Expenses        | %13.2f  |\n", expenses1);
+                    fprintf(Rs1, "| Emergency Fund        | %13.2f  |\n", Emergency_Fund);
+                    fprintf(Rs1, "| Grocery Bill          | %13.2f  |\n", groceries * 12);
+                    fprintf(Rs1, "| Gas Bill              | %13.2f  |\n", gas * 12);
+                    fprintf(Rs1, "| Monthly subscriptions | %13.2f  |\n", subserv * 12);
+                    fprintf(Rs1, "| Monthly Medical Bill  | %13.2f  |\n", medical * 12);
+                    fprintf(Rs1, "| Monthly Insurance Bill| %13.2f  |\n", insurance * 12);
+                    fprintf(Rs1, "| Monthly Mortgage  Bill| %13.2f  |\n", mortgage * 12);
+                    fprintf(Rs1, "+-----------------------+---------------+\n");
+                    fprintf(Rs1, "| Money Remaining       | %13.2f  |\n",left_over_income);
+                    fprintf(Rs1, "+-----------------------+---------------+\n");
+                    fclose(Rs1);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                case 2:
+                    printf("\n\nClearing your budget\n");
+                    printLoop();
+                    FILE *Usr2 = fopen(usrname, "r");
+                    if (Usr2 == NULL) {
+                        printf("\nERROR 235\nFailed to open file\n");
+                        return 1;
+                    }
+                    fgets(passave, sizeof(passave), Usr2);
+                    fclose(Usr2);
+                    Usr2 = fopen(usrname, "w");
+                    if (Usr2 == NULL)
+                    {
+                        printf("\nERROR 234");
+                        return 1;
+                    }
+                    fprintf(Usr2,"%s",passave);
+                    printf("\nThe budget has been cleared\n");
+                    fclose(Usr2);
+                    break;
+                case 3:
+                FILE *Rs2 = fopen(usrname, "r");
+                //---------------------Utilize entire file reading
+                
+                // Skip the first line (password)
+                fgets(passave, sizeof(passave), Rs2);
+                
+                printf("\nPrinting your file.");
+                printLoop();
+                
+                // Check if the file has remaining content
+                if (fgets(line, sizeof(line), Rs2) == NULL) {
+                    printf("File is empty or error reading.\n");
+                } else {
+                    // Print the first read line
+                    printf("%s", line);
+                
+                    // Print the remaining lines
+                    while (fgets(line, sizeof(line), Rs2) != NULL) {
+                        printf("%s", line);
+                    }
+                }
+                
+                fclose(Rs2);
+                break;
+                
+                case 4:
+                    printf("\nEXITING!");
+                    exit(0);
+                default:
+                    printf("\nInvalid option.");
+                    break;
+        }
+    }
+    
+
+return 0;
 }
+
+void flushInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+void printLoop(){
+    int art =0;
+    printf("\n");
+    while(art<20)
+    {
+        printf("#");
+        sleep(1);
+        art++;
+    }
+    }
