@@ -50,7 +50,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     {
         fprintf(Rdv,"\nConsidering you are spending under or exactly at the percentage of spending that we recommend which is 26%%, your spending amount of $%.2f seems in line with what's recommended\n",expenses1);
     }
-    if(dependents==0&&Emergency_Fund>=1000)
+    if((dependents==0)&&(Emergency_Fund>=1000))
     {
         fprintf(Rdv,"\nBased on the statement that you have zero dependents its advised that you continue to keep the $%.2f dollars or above that you have saved for emergencies.",Emergency_Fund);
     }
@@ -126,23 +126,25 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     }
     fprintf(Rdv,"\nYou should be saving around 20%% of your income. So in your case around %.2f",income2*.25);
     savings = income2*.20;
+    fprintf(Rdv,"Monthly Budget\n");
     fprintf(Rdv, "\n+---------------------+-----------------+\n");
     fprintf(Rdv, "| Category             | Value          |\n");
     fprintf(Rdv, "+----------------------+----------------+\n");
     fprintf(Rdv, "| Income post tax       | %13.2f |\n", income2);
     fprintf(Rdv, "| Total Loans           | %13.2f |\n", loan_amount);
-    fprintf(Rdv, "| Utilities (Annual)    | %13.2f |\n", util * 12);
+    fprintf(Rdv, "| Utilities (Monthly)   | %13.2f |\n", util);
     fprintf(Rdv, "| Dependents            | %13d |\n", dependents);
     fprintf(Rdv, "| Total Assets          | %13.2f |\n", assets);
     fprintf(Rdv, "| Total Expenses        | %13.2f |\n", expense_limit);
     fprintf(Rdv, "| Emergency Fund        | %13.2f |\n", Emergency_Fund);
     fprintf(Rdv, "| Grocery Bill          | %13.2f |\n", groceries);
-    fprintf(Rdv, "| Gas Bill              | %13.2f |\n", gas * 12);
-    fprintf(Rdv, "| Monthly subscriptions | %13.2f |\n", subserv * 12);
-    fprintf(Rdv, "| Monthly Medical Bill  | %13.2f |\n", medical * 12);
+    fprintf(Rdv, "| Gas Bill              | %13.2f |\n", gas);
+    fprintf(Rdv, "| Monthly subscriptions | %13.2f |\n", subserv);
+    fprintf(Rdv, "| Monthly Medical Bill  | %13.2f |\n", medical);
     fprintf(Rdv, "| Savings               | %13.2f |\n", savings);
-    fprintf(Rdv, "| Monthly Insurance Bill| %13.2f |\n", insurance * 12);
-    fprintf(Rdv, "| Monthly Mortgage  Bill| %13.2f |\n", mortgage * 12);
+    fprintf(Rdv, "| Monthly Insurance Bill| %13.2f |\n", insurance);
+    fprintf(Rdv, "| Monthly Mortgage  Bill| %13.2f |\n", mortgage);
+    fprintf(Rdv, "| Debt payments(Monthly)| %13.2f |\n", debt_payment);
     fprintf(Rdv, "+----------------------+----------------+\n");
     fprintf(Rdv, "| Money Remaining       | %13.2f |\n", left_over_income);
     fprintf(Rdv, "+----------------------+----------------+\n");
