@@ -16,7 +16,7 @@ int main() {
     char confir[INFOLENGTH] = {};
     char temploc[1888] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
-    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount = 0,util,carpay = 0,insurance = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0,mortgage = 0;
+    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount = 0,total_loan = 0,util = 0,carpay = 0,insurance = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0,mortgage = 0;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -218,7 +218,7 @@ int main() {
         
                 printf("\nEnter your current total loan amount:\n");
                 scanf("%f", &loan_amount);
-                int total_loan = calculate_total_loans(car_payment, loan_amount);
+                total_loan = calculate_total_loans(car_payment, loan_amount);
         
                 printf("\nEnter approximated amount of monthly utility bills:\n");
                 scanf("%f", &util);
@@ -257,14 +257,14 @@ int main() {
                 scanf("%f", &Emergency_Fund);
                 printf("\nEnter your monthly insurance bill.\n");
                 scanf("%f",&insurance);
-                printf("\nEnter your monthly morgage bill.\n");
-                scanf("%f",mortgage);
+                printf("\nEnter your monthly mortgage bill.\n");
+                scanf("%f",&mortgage);
         
                 left_over_income = calculate_remaining_balance(income2, expenses1, total_loan, car_payment, Emergency_Fund, dependents, groceries, gas, medical, insurance, mortgage);
         
                 printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
                 printf("\nPrinting your information in your file.\n");
-                FILE * NZXT = fopen("budgetignore.txt",'w');
+                FILE * NZXT = fopen("budgetignore.txt","w");
                 if(NZXT==NULL){
                     printf("\nFATAL ERROR 7838");
                     exit(0);
@@ -285,7 +285,7 @@ int main() {
                 fprintf(Rs1, "| Total Expenses        | %13.2f |\n", expenses1);
                 fprintf(NZXT,"\n%.2f",expenses1);
                 fprintf(Rs1, "| Emergency Fund        | %13.2f |\n", Emergency_Fund);
-                fprintf(NZXT,"\n%.2f",expenses1);
+                fprintf(NZXT,"\n%.2f",Emergency_Fund);
                 fprintf(Rs1, "| Grocery Bill          | %13.2f |\n", groceries * 12);
                 fprintf(NZXT,"\n%.2f",groceries);
                 fprintf(Rs1, "| Gas Bill              | %13.2f |\n", gas * 12);
@@ -296,7 +296,7 @@ int main() {
                 fprintf(NZXT,"\n%.2f",medical);
                 fprintf(Rs1, "| Monthly Insurance Bill| %13.2f |\n", insurance * 12);
                 fprintf(NZXT,"\n%.2f",insurance);
-                fprintf(Rs1, "| Monthly Mortgage  Bill| %13.2f |\n", mortgage * 12);
+                fprintf(Rs1, "| Monthly Mortgage Bill | %13.2f |\n", mortgage * 12);
                 fprintf(NZXT,"\n%.2f",mortgage);
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Money Remaining       | %13.2f |\n",left_over_income);
@@ -346,16 +346,30 @@ int main() {
                     exit(0);
                 }
                 fclose(Rs1);
-                FILE *NZXT = fopen("budgetignore.txt",'r');
+                FILE *NZXT = fopen("budgetignore.txt","r");
                 if(NZXT==NULL)
                 {
                     printf("\nFATAL ERROR 3984\nExiting\n");
                     exit(0);
                 }
+                fscanf(NZXT,"%f",&income2);
+                fscanf(NZXT,"%f",&loan_amount);
+                fscanf(NZXT,"%f",&util);
+                fscanf(NZXT,"%d",&dependents);
+                fscanf(NZXT,"%f",&assets);
+                fscanf(NZXT,"%f",&expenses1);
+                fscanf(NZXT,"%f",&Emergency_Fund);
+                fscanf(NZXT,"%f",&groceries);
+                fscanf(NZXT,"%f",&gas);
+                fscanf(NZXT,"%f",&subserv);
+                fscanf(NZXT,"%f",&medical);
+                fscanf(NZXT,"%f",&insurance);
+                fscanf(NZXT,"%f",&mortgage);
+                fclose(NZXT);
                 Rs1 = fopen(usrname,"a");
                     do{
                         printf("\nWhat information would you like to update?\n");
-                        printf("5 = Update income\n6 = Update expenses\n7 = Update Dependants\n8 = Update Assets\n9 = Loan Amount\n10 = Save Changes\n14 = Exit\n");
+                        printf("5 = Update income\n6 = Update expenses\n7 = Update Dependants\n8 = Update Assets\n9 = Update Loan Amount\n10 = Update Emergency Fund\n11 = Update Grocery Bill\n12 = Update Gas Bill\n13 = Update Monthly Subscriptions\n14 = Update Monthly Medical Bill\n15 = Update Monthly Insurance Bill\n16 = Update Mortgage Amount\n17 = Save Changes\n18 = Exit\n");
                         scanf("%d",&option_x);
                         switch(option_x){
                             case 5:
@@ -410,12 +424,12 @@ int main() {
                                         exit(1);
                                     }
                                     fclose(Rs1);
+                                    left_over_income = calculate_remaining_balance(income2, expenses1, total_loan, car_payment, Emergency_Fund, dependents, groceries, gas, medical, insurance, mortgage);
                                     Rs1 = fopen(usrname,"w");
                                     fprintf(Rs1,"%s\n",passave);
                                     printf("\nChanges complete");
                                     printf("\nPrinting your information\n");
                                     printLoop();
-                                    fprintf(Rs1,"%s",passave);
                                     fprintf(Rs1, "\n+-----------------------+---------------+\n");
                                     fprintf(Rs1, "| Category              | Value         |\n");
                                     fprintf(Rs1, "+-----------------------+---------------+\n");
