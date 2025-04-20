@@ -148,6 +148,8 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "+-----------------------+---------------+\n");
     fprintf(Rdv, "| Money Remaining       | %13.2f |\n", left_over_income);
     fprintf(Rdv, "+-----------------------+---------------+\n");
+    if(left_over_income>1000)
+    {
     fprintf(Rdv,"\n\nWith the $%.2f dollars that you have left over, Consider investing, giving to charity or",left_over_income);
     if(dependents>0)
     {
@@ -158,6 +160,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     else{
         fprintf(Rdv," since you have have zero dependents, think about investing into a 401k, Roth IRA, Mutual Fund etc Make your money work for you we'd recommend you put 30%% towards that, which would put you at %.2f per month",(left_over_income*.30)/12);
     }
+}
     fclose(Rdv);
 }
 void flushInputBuffer(void) {
