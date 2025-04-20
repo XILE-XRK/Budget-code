@@ -56,5 +56,5 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     else{
 
     }
-
+    fclose(Rdv);
 }
