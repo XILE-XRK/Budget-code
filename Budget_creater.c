@@ -274,7 +274,7 @@ int main() {
                 fprintf(Rs1, "| Grocery Bill         | %13.2f |\n", groceries * 12);
                 fprintf(Rs1, "| Gas Bill             | %13.2f |\n", gas * 12);
                 fprintf(Rs1, "| Monthly subscriptions| %13.2f |\n", subserv * 12);
-                fprintf(Rs1, "| Monthly medical Bill | %13.2f |\n", medical * 12);
+                fprintf(Rs1, "| Monthly Medical Bill | %13.2f |\n", medical * 12);
                 fprintf(Rs1, "+----------------------+---------------+\n");
                 fprintf(Rs1, "| Money Remaining      | %13.2f |\n", left_over_income);
                 fprintf(Rs1, "+----------------------+---------------+\n");
