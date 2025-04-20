@@ -16,7 +16,7 @@ int main() {
     char confir[INFOLENGTH] = {};
     char temploc[1888] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
-    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount,util,carpay = 0,insurance = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0,mortgage = 0;
+    float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount = 0,util,carpay = 0,insurance = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0,mortgage = 0;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -133,7 +133,7 @@ int main() {
     if(ilios==1){
         printf("What actions would you like to perform today?\n");
         //Change the following menu into a function in order to clean it up and more easily add extra things in the future.
-        printf("\n0 - Create a new budget\n\n1 - Update existing information\n\n2 - Delete a current budget plan.\n\n3 - Print current budget plan\n\n4 - Exit\n\n");
+        printf("\n0 - Create a new budget\n\n1 - Update current budget plan.\n\n2 - Delete current budget plan\n\n3 - Print Your budget\n\n4 - Exit\n\n");//Update current budget plan
         scanf("%d",&option);
         printf("\nYou have chosen option %d",option);
         flushInputBuffer();
@@ -264,27 +264,44 @@ int main() {
         
                 printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
                 printf("\nPrinting your information in your file.\n");
-        
+                FILE * NZXT = fopen("budgetignore.txt",'w');
+                if(NZXT==NULL){
+                    printf("\nFATAL ERROR 7838");
+                    exit(0);
+                }
                 fprintf(Rs1, "\n+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Category              | Value         |\n");
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Income post tax       | %13.2f |\n", income2);
+                fprintf(NZXT,"%.2f",income2);
                 fprintf(Rs1, "| Total Loans           | %13.2f |\n", loan_amount);
+                fprintf(NZXT,"\n%.2f",loan_amount);
                 fprintf(Rs1, "| Utilities (Annual)    | %13.2f |\n", util * 12);
+                fprintf(NZXT,"\n%.2f",util);
                 fprintf(Rs1, "| Dependents            | %13d |\n", dependents);
+                fprintf(NZXT,"\n%d",dependents);
                 fprintf(Rs1, "| Total Assets          | %13.2f |\n", assets);
+                fprintf(NZXT,"\n%.2f",assets);
                 fprintf(Rs1, "| Total Expenses        | %13.2f |\n", expenses1);
+                fprintf(NZXT,"\n%.2f",expenses1);
                 fprintf(Rs1, "| Emergency Fund        | %13.2f |\n", Emergency_Fund);
+                fprintf(NZXT,"\n%.2f",expenses1);
                 fprintf(Rs1, "| Grocery Bill          | %13.2f |\n", groceries * 12);
+                fprintf(NZXT,"\n%.2f",groceries);
                 fprintf(Rs1, "| Gas Bill              | %13.2f |\n", gas * 12);
+                fprintf(NZXT,"\n%.2f",gas);
                 fprintf(Rs1, "| Monthly subscriptions | %13.2f |\n", subserv * 12);
+                fprintf(NZXT,"\n%.2f",subserv);
                 fprintf(Rs1, "| Monthly Medical Bill  | %13.2f |\n", medical * 12);
+                fprintf(NZXT,"\n%.2f",medical);
                 fprintf(Rs1, "| Monthly Insurance Bill| %13.2f |\n", insurance * 12);
+                fprintf(NZXT,"\n%.2f",insurance);
                 fprintf(Rs1, "| Monthly Mortgage  Bill| %13.2f |\n", mortgage * 12);
+                fprintf(NZXT,"\n%.2f",mortgage);
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Money Remaining       | %13.2f |\n",left_over_income);
                 fprintf(Rs1, "+-----------------------+---------------+\n");
-        
+                fclose(NZXT);
                 fclose(Rs1);
                 printf("\nExiting\n");
                 sleep(2);
@@ -329,6 +346,12 @@ int main() {
                     exit(0);
                 }
                 fclose(Rs1);
+                FILE *NZXT = fopen("budgetignore.txt",'r');
+                if(NZXT==NULL)
+                {
+                    printf("\nFATAL ERROR 3984\nExiting\n");
+                    exit(0);
+                }
                 Rs1 = fopen(usrname,"a");
                     do{
                         printf("\nWhat information would you like to update?\n");
@@ -371,7 +394,7 @@ int main() {
                                 printf("\nThe loan amount has been updated successfully!\n");
                                 break;
                             case 10:
-                                printf("\nAre you finished making changes?");
+                                printf("\nAre you finished making changes?(Yes/No)\n");
                                 scanf("%s",confir);
                                 if(strncmp(confir,"Yes",3)==0||strncmp(confir,"yes",3)==0){
                                     fclose(Rs1);
@@ -392,6 +415,7 @@ int main() {
                                     printf("\nChanges complete");
                                     printf("\nPrinting your information\n");
                                     printLoop();
+                                    fprintf(Rs1,"%s",passave);
                                     fprintf(Rs1, "\n+-----------------------+---------------+\n");
                                     fprintf(Rs1, "| Category              | Value         |\n");
                                     fprintf(Rs1, "+-----------------------+---------------+\n");
