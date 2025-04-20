@@ -173,4 +173,5 @@ void printLoop(){
         sleep(1);
         art++;
     }
+    printf("\n");
     }
