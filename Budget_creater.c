@@ -395,19 +395,43 @@ int main() {
                                 break;
                             case 8:
                                 printf("\nWhat would you like to change your asset amount to?");
-                                flushInputBuffer();
                                 scanf("%f",&assets);
                                 sleep(2);
                                 printf("\nThe asset amount has been updated successfully!");
                                 break;
                             case 9:
                                 printf("\nWhat would you like to change your loan amount to?\n");
-                                flushInputBuffer();
-                                scanf("%.2f",loan_amount);
+                                scanf("%.2f",&loan_amount);
                                 sleep(2);
                                 printf("\nThe loan amount has been updated successfully!\n");
                                 break;
                             case 10:
+                                printf("\nWhat would you like to update your Emergency Fund to?\n");
+                                scanf("%f",&Emergency_Fund);
+                                sleep(2);
+                                printf("\nThe Emergency Fund amount has been updated successfully\n");
+                                break;
+                            case 11:
+                                printf("\nWhat would you like to update your Monthly grocery amount to?\n");
+                                scanf("%f",&groceries);
+                                sleep(2);
+                                printf("\nThe Grocery amount has been updated successfully\n");
+                                break;
+                            case 12:
+                                printf("\nWhat would you like to update your Monthly gas bill to?\n");
+                                scanf("%f",&gas);
+                                sleep(2);
+                                printf("\nMonthly Gas amount updated successfully\n");
+                                break;
+                            case 13:
+                                printf("\nWhat would you like to update your Monthly Subscriptions to?\n");
+                                scanf("%f",&subserv);
+                                sleep(2);
+                                printf("\nMonthly Subscriptions updated\n");
+                                break;
+
+
+                            case 17:
                                 printf("\nAre you finished making changes?(Yes/No)\n");
                                 scanf("%s",confir);
                                 if(strncmp(confir,"Yes",3)==0||strncmp(confir,"yes",3)==0){
@@ -457,7 +481,7 @@ int main() {
                                     printf("\nEnter 14, to quit, or 10 when you would like to add your changes.");
                                 }
                                 break;
-                            case 14:
+                            case 18:
                                 printf("\nCancel\n");
                                 fclose(Rs1);
                                 exit(0);
