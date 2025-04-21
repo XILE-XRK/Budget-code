@@ -75,7 +75,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     }
     else if((income2*.5>loan_amount)&&loan_amount>0)
     {
-        fprintf(Rdv,"\nYour total loan amount seems to be under 50%% of your total income which is good. But its not zero, so lets get that paid off.\nI recommend you start allocating 20%% of your income to paying this debt off, as the close you get to being debt free, the more you will be able to dedicate some of your income to saving");
+        fprintf(Rdv,"\nYour total loan amount seems to be under 50%% of your total income which is good. But its not zero, so lets get that paid off.\nI recommend you start allocating 20%% of your income to paying this debt off, as the closer you get to being debt free, the more you will be able to dedicate some of your income to saving");
         debt_payment = (income2*.20)/12;//calculates the amount you should put towards debt monthly 
     }
     else{
