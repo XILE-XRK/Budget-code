@@ -128,7 +128,7 @@ int main() {
         }
     else {
         printf("\nInvalid input. Please restart the program and enter 'Yes' or 'No'.\n");
-        scanf("%s",&usrstat);
+        scanf("%s",usrstat);
         flushInputBuffer();
 
         }
