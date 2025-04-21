@@ -80,7 +80,14 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     }
     else{
         fprintf(Rdv,"\nSince it seems you are on the right track and have no debt to speak of I suggest you keep up the good work.");
-        debt_payment = 0;
+        
+        if(loan_amount==0){
+            debt_payment = 0;
+        } 
+        else
+        {
+            debt_payment = (income2*.20)/12;
+        }
     }
     if (((income2*.15)>=groceries*12)&&dependents<=1)
     {
@@ -155,10 +162,10 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     {
         fprintf(Rdv," if your dependents are children, consider putting 40%% of that towards their college fund. Which is %.2f per month",(left_over_income*.40)/12);
         post_col_sav = left_over_income - (left_over_income*.40);
-        fprintf(Rdv," if you are feeling mighty gracious, you could take 15%% of that and dedicate that towards their marriage. Which is %.2f per month\n",(post_col_sav*15)/12);
+        fprintf(Rdv," if you are feeling mighty gracious, you could take 15%% of that and dedicate that towards their marriage. Which is %.2f per month.\n",(post_col_sav*15)/12);
     }
     else{
-        fprintf(Rdv," since you have have zero dependents, think about investing into a 401k, Roth IRA, Mutual Fund etc Make your money work for you we'd recommend you put 30%% towards that, which would put you at %.2f per month",(left_over_income*.30)/12);
+        fprintf(Rdv," since you have have zero dependents, think about investing into a 401k, Roth IRA, Mutual Fund etc Make your money work for you we'd recommend you put 30%% towards that, which would put you at %.2f per month.",(left_over_income*.30)/12);
     }
 }
     fclose(Rdv);
