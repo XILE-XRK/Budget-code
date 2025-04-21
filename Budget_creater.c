@@ -10,11 +10,13 @@ int main() {
     char usrstat[INFOLENGTH] = {};
     char usrname[INFOLENGTH] = {};
     char paswrd[INFOLENGTH] = {};
+    char iggy[INFOLENGTH] = "_budgetignore.txt";
     char paswrd2ndcheck[INFOLENGTH] = {};
     char line[1024];
     char passave[INFOLENGTH] = {};
     char confir[INFOLENGTH] = {};
     char temploc[1888] = {};
+    char usrname1[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,dependents = 0, carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
     float income = 0,income2 = 0,expenses1,tax_rate = 0.09,income_tax,loan_amount = 0,total_loan = 0,util = 0,carpay = 0,insurance = 0,assets = 0.0,carpayment = 0,groceries = 0,gas = 0, left_over_income = 0, subserv = 0, medical = 0,Emergency_Fund = 1000,car_payment = 0,mortgage = 0;
 
@@ -57,6 +59,7 @@ int main() {
             }
             else {
                 ZTX=3;  // valid file found
+                strcpy(usrname1,usrname);
             }
         }
 
@@ -264,7 +267,8 @@ int main() {
         
                 printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
                 printf("\nPrinting your information in your file.\n");
-                FILE * NZXT = fopen("budgetignore.txt","w");
+                strcat(usrname1,iggy);
+                FILE * NZXT = fopen(usrname1,"w");
                 if(NZXT==NULL){
                     printf("\nFATAL ERROR 7838");
                     exit(0);
@@ -313,13 +317,14 @@ int main() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 case 1:
                 // Skip the password
+                strcat(usrname1,iggy);
                 fclose(Rs1);
                 Rs1 = fopen(usrname,"r");
                 if(Rs1==NULL){
                     printf("\nFile opening failed!");
                     exit(0);
                 }
-                fgets(temploc, sizeof(temploc), Rs1); // Read password line
+                fgets(passave, sizeof(passave), Rs1); // Read password line
 
                 int hasData = 0;
 
@@ -346,7 +351,7 @@ int main() {
                     exit(0);
                 }
                 fclose(Rs1);
-                FILE *NZXT = fopen("budgetignore.txt","r");
+                FILE *NZXT = fopen(usrname1,"r");
                 if(NZXT==NULL)
                 {
                     printf("\nFATAL ERROR 3984\nExiting\n");
@@ -458,7 +463,7 @@ int main() {
                                         printf("Fatal error 226");
                                     }
                                     fgets(passave, sizeof(passave), Rs1);
-                                    if (fgets(passave, sizeof(passave), Rs1) == NULL) {
+                                    if (passave == NULL) {
                                         printf("Error: Unable to read password line\n");
                                         fclose(Rs1);
                                         exit(1);
@@ -492,7 +497,7 @@ int main() {
                                     fclose(Rs1);
                                     budgetadvise(usrname,income2,left_over_income,loan_amount,util,dependents,assets,expenses1,Emergency_Fund,groceries,gas,subserv,medical,insurance,mortgage);
                                     zila++;
-                                    NZXT = fopen("budgetignore.txt","w");
+                                    NZXT = fopen(usrname1,"w");
                                     if(NZXT==NULL)
                                     {
                                         printf("\nFATAL ERROR 3984\nExiting\n");
@@ -531,7 +536,7 @@ int main() {
                     }while(option_x!=14||zila==0);// add print function information here
                     fprintf(Rs1,"%s\n",passave);
                     fprintf(Rs1, "\n+-----------------------+---------------+\n");
-                    fprintf(Rs1, "| Category             | Value          |\n");
+                    fprintf(Rs1, "| Category              | Value         |\n");
                     fprintf(Rs1, "+-----------------------+---------------+\n");
                     fprintf(Rs1, "| Income post tax       | %13.2f |\n", income2);
                     fprintf(Rs1, "| Total Loans           | %13.2f |\n", loan_amount);
