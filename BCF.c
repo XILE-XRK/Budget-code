@@ -153,7 +153,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "| Monthly Mortgage  Bill| %13.2f |\n", mortgage);
     fprintf(Rdv, "| Debt payments(Monthly)| %13.2f |\n", debt_payment);
     fprintf(Rdv, "+-----------------------+---------------+\n");
-    fprintf(Rdv, "| Money Remaining       | %13.2f |\n", left_over_income);
+    fprintf(Rdv, "| Money Remaining       | %13.2f |\n", left_over_income/12);
     fprintf(Rdv, "+-----------------------+---------------+\n");
     if(left_over_income>1000)
     {
@@ -185,3 +185,21 @@ void printLoop(){
     }
     printf("\n");
     }
+    float get_float_input() {
+        char input[50];
+        char cleaned[50] = {};
+        int j = 0;
+    
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';  // Remove newline
+    
+        // Remove commas
+        for (int i = 0; input[i] != '\0'; i++) {
+            if (input[i] != ',') {
+                cleaned[j++] = input[i];
+            }
+        }
+    
+        return strtof(cleaned, NULL);  // Convert to float
+    }
+    
