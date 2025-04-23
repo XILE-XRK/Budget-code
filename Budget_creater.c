@@ -22,6 +22,7 @@ typedef struct{
     float Emergency_Fund;
     float mortgage;
     int dependents;
+    float car_payment;
 }BudgetUser;
 int main() {
     BudgetUser user;
@@ -34,7 +35,7 @@ int main() {
     char temploc[1888] = {};
     char usrname1[INFOLENGTH] = {};
     int attempts = 0, ilios = 0, option = 0,option_x,carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
-    float income2 = 0,tax_rate = 0.09,income_tax,total_loan = 0,carpay = 0,left_over_income = 0,car_payment = 0;
+    float income2 = 0,tax_rate = 0.09,income_tax,total_loan = 0,carpay = 0,left_over_income = 0;
 
     printf("Welcome to the budget app.\n");
     printf("After providing some information, I will help you set up a budget to get you out of debt and improve your finances.\n");
@@ -45,7 +46,7 @@ int main() {
     flushInputBuffer();
     while(stat==0){
 
-    if (strcmp(usrstat,"Yes")==0||strcmp(usrstat,"yes")==0) {//compares the user response to the ascii codes. Use Strcmp and string arrays instead
+    if (strcmp(usrstat,"Yes")==0||strcmp(usrstat,"yes")==0) {//uses strcmp function in order to compare the users input to either Yes or yes to see if thats what the user entered and execute the code accordingly.
         // Returning user login
         printf("\n\nWelcome back!\n\n");
 
@@ -153,6 +154,7 @@ int main() {
         printf("What actions would you like to perform today?\n");
         //Change the following menu into a function in order to clean it up and more easily add extra things in the future.
         printf("\n0 - Create a new budget\n\n1 - Update current budget plan.\n\n2 - Delete current budget plan\n\n3 - Print Your budget\n\n4 - Exit\n\n");//Update current budget plan
+        printf("\nEnter your choice:\n");
         scanf("%d",&option);
         printf("\nYou have chosen option %d",option);
         flushInputBuffer();
@@ -201,11 +203,10 @@ int main() {
         
                 printf("\nLet us continue\n");
         
-                printf("\nEnter the total house yearly income (Without commas):\n");
-                scanf("%f", &user.income);
+                printf("\nEnter the total house yearly income (You can use commas):\n");
+                user.income = get_float_input();                
                 income2 = user.income - (user.income * tax_rate);
                 printf("\nYou entered an income value of %.2f.\n", user.income);
-        
                 printf("\nDo you currently have any car payments? (Yes/No)\n");
                 scanf(" %s", confir);
                 flushInputBuffer();
@@ -214,14 +215,11 @@ int main() {
                     if (strcmp(confir, "Yes") == 0 || strcmp(confir, "yes") == 0 || strcmp(confir, "Y") == 0 || strcmp(confir, "y") == 0) {
                         printf("\nHow many payments of what amount do you have left on your vehicle\n");
                         printf("Enter the monthly car payment:\n");
-                        scanf("%f", &carpay);
-                        flushInputBuffer();
+                        carpay = get_float_input();
         
                         printf("Enter the amount of months left to pay off the vehicle:\n");
-                        scanf("%d", &carpaymonths);
-                        flushInputBuffer();
-        
-                        car_payment = calculate_total_car_loan(carpay, carpaymonths);
+                        carpaymonths = get_float_input();
+                        user.car_payment = calculate_total_car_loan(carpay, carpaymonths);
                         rs = 1;
                     }
                     else if (strcmp(confir, "No") == 0 || strcmp(confir, "no") == 0 || strcmp(confir, "N") == 0 || strcmp(confir, "n") == 0) {
@@ -236,49 +234,53 @@ int main() {
                 }
         
                 printf("\nEnter your current total loan amount:\n");
-                scanf("%f", &user.loan_amount);
-                total_loan = calculate_total_loans(car_payment, user.loan_amount);
+                user.loan_amount = get_float_input();
+                total_loan = calculate_total_loans(user.car_payment, user.loan_amount);
         
                 printf("\nEnter approximated amount of monthly utility bills:\n");
-                scanf("%f", &user.util);
+                user.util = get_float_input();
         
                 printf("\nEnter number of dependents:\n");
                 scanf("%d", &user.dependents);
+                flushInputBuffer();
+
                 while(izo == 0){
                     if(user.dependents < 0){
-                        printf("\nEnter a positive number:\n");
+                        printf("\nPlease enter a positive number:\n");
                         scanf("%d", &user.dependents);
+                        flushInputBuffer();
                     } else {
                         izo++;
                     }
                 }
         
                 printf("\nEnter total expenses per month:\n");
-                scanf("%f", &user.expenses1);
+                user.expenses1 = get_float_input();
         
                 printf("\nEnter your total assets:\n");
-                scanf("%f", &user.assets);
+                user.assets = get_float_input();
         
                 printf("\nEnter monthly grocery bill:\n");
-                scanf("%f", &user.groceries);
+                user.groceries = get_float_input();
         
                 printf("\nEnter monthly gas expenses:\n");
-                scanf("%f", &user.gas);
+                user.groceries = get_float_input();
         
                 printf("\nEnter your monthly subscription payments:\n");
-                scanf("%f", &user.subserv);
+                user.subserv = get_float_input();
         
                 printf("\nEnter your monthly medical payments:\n");
-                scanf("%f", &user.medical);
+                user.medical = get_float_input();
         
                 printf("\nEnter your Emergency Fund:\n");
-                scanf("%f", &user.Emergency_Fund);
+                user.Emergency_Fund = get_float_input();
+                
                 printf("\nEnter your monthly insurance bill.\n");
-                scanf("%f",&user.insurance);
+                user.insurance = get_float_input();
                 printf("\nEnter your monthly mortgage bill.\n");
-                scanf("%f",&user.mortgage);
+                user.mortgage = get_float_input();
         
-                left_over_income = calculate_remaining_balance(income2, user.expenses1, total_loan, car_payment, user.Emergency_Fund, user.dependents, user.groceries, user.gas, user.medical, user.insurance, user.mortgage);
+                left_over_income = calculate_remaining_balance(income2, user.expenses1, total_loan, user.car_payment, user.Emergency_Fund, user.dependents, user.groceries, user.gas, user.medical, user.insurance, user.mortgage);
         
                 printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
                 printf("\nPrinting your information in your file.\n");
@@ -288,6 +290,7 @@ int main() {
                     printf("\nFATAL ERROR 7838");
                     exit(0);
                 }
+                fprintf(Rs1,"\t\t\tYEARLY COST\n");
                 fprintf(Rs1, "\n+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Category              | Value         |\n");
                 fprintf(Rs1, "+-----------------------+---------------+\n");
@@ -301,7 +304,7 @@ int main() {
                 fprintf(NZXT,"\n%d",user.dependents);
                 fprintf(Rs1, "| Total Assets          | %13.2f|\n", user.assets);
                 fprintf(NZXT,"\n%.2f",user.assets);
-                fprintf(Rs1, "| Total Expenses        | %13.2f|\n", user.expenses1 *12);
+                fprintf(Rs1, "| Expenses Yearly    | %13.2f|\n", user.expenses1 *12);
                 fprintf(NZXT,"\n%.2f",user.expenses1);
                 fprintf(Rs1, "| Emergency Fund        | %13.2f|\n", user.Emergency_Fund);
                 fprintf(NZXT,"\n%.2f",user.Emergency_Fund);
@@ -388,82 +391,81 @@ int main() {
                 fclose(NZXT);
                 Rs1 = fopen(user.usrname,"a");
                     do{
-                        printf("\nWhat information would you like to update?\n");
+                        printf("\n\n\nWhat information would you like to update?\n");
                         printf("5  = Update income\n\n6  = Update expenses\n\n7  = Update Dependants\n\n8  = Update Assets\n\n9  = Update Loan Amount\n\n10 = Update Emergency Fund\n\n11 = Update Grocery Bill\n\n12 = Update Gas Bill\n\n13 = Update Monthly Subscriptions\n\n14 = Update Monthly Medical Bill\n\n15 = Update Monthly Insurance Bill\n\n16 = Update Mortgage Amount\n\n\n17 = Save Changes\n\n\n18 = Exit\n");
+                        printf("\nEnter your option:\n");
                         scanf("%d",&option_x);
+                        flushInputBuffer();
                         switch(option_x){
                             case 5:
                                 printf("\n What is the new income value you would like to use?\n");
-                                flushInputBuffer();
-                                scanf("%f",&income2);
+                                user.income = get_float_input();
                                 sleep(2);
-                                printf("Income Updated");
+                                printf("Income Updated\n");
                                 break;
                             case 6:
                                 printf("\nWhat would you like to change your total expenses to?\n");
-                                flushInputBuffer();
-                                scanf("%f",&user.expenses1);
+                                user.expenses1 = get_float_input();
                                 sleep(2);
                                 printf("\nExpenses Successfully Updated\n");
                                 break;
                             case 7:
                                 printf("What would you like to change your dependent count to?\n");
-                                flushInputBuffer();
-                                scanf("%d",&user.dependents);
+                                user.dependents = get_float_input();
                                 sleep(2);
                                 printf("Dependents successfully updated.\n");
                                 break;
                             case 8:
                                 printf("\nWhat would you like to change your asset amount to?\n");
-                                scanf("%f",&user.assets);
+                                user.assets = get_float_input();
                                 sleep(2);
                                 printf("\nThe asset amount has been updated successfully!\n");
                                 break;
                             case 9:
                                 printf("\nWhat would you like to change your loan amount to?\n");
-                                scanf("%.2f",&user.Emergency_Fund);
+                                user.loan_amount = get_float_input();
                                 sleep(2);
                                 printf("\nThe loan amount has been updated successfully!\n");
                                 break;
                             case 10:
                                 printf("\nWhat would you like to update your Emergency Fund to?\n");
-                                scanf("%f",&user.Emergency_Fund);
+                                user.Emergency_Fund = get_float_input();
                                 sleep(2);
                                 printf("\nThe Emergency Fund amount has been updated successfully\n");
                                 break;
                             case 11:
                                 printf("\nWhat would you like to update your Monthly grocery amount to?\n");
-                                scanf("%f",&user.groceries);
+                                user.groceries = get_float_input();
                                 sleep(2);
                                 printf("\nMonthly Grocery Bill updated successfully\n");
                                 break;
                             case 12:
                                 printf("\nWhat would you like to update your Monthly gas bill to?\n");
-                                scanf("%f",&user.gas);
+                                user.gas = get_float_input();
                                 sleep(2);
                                 printf("\nMonthly Gas amount updated successfully\n");
                                 break;
                             case 13:
                                 printf("\nWhat would you like to update your Monthly Subscriptions to?\n");
-                                scanf("%f",&user.subserv);
+                                user.subserv = get_float_input();
                                 sleep(2);
                                 printf("\nMonthly Subscriptions updated successfully\n");
                                 break;
                             case 14:
                                 printf("\nWhat would you like to update your Monthly Medical Bill to?\n");
-                                scanf("%f",&user.medical);
+                                user.medical = get_float_input();
                                 sleep(2);
                                 printf("\nMonthly Medical Bills updated sucessfully\n");
                                 break;
                             case 15:
                                 printf("\nWhat would you like to update your Monthly Insurance Bill to?\n");
-                                scanf("%f",&user.insurance);
+                                user.insurance = get_float_input();
                                 sleep(2);
                                 printf("\nMonthly Insurance Bill updated successfully\n");
                                 break;
                             case 16:
                                 printf("\nWhat would you like your Monthly Mortgage Bill to be updated to?\n");
-                                scanf("%f",&user.mortgage);
+                                user.mortgage = get_float_input();
                                 sleep(2);
                                 printf("\nMonthly Mortgage Bill updated successfully\n");
                                 break;
@@ -484,7 +486,7 @@ int main() {
                                         exit(1);
                                     }
                                     fclose(Rs1);
-                                    left_over_income = calculate_remaining_balance(income2, user.expenses1, total_loan, car_payment, user.Emergency_Fund, user.dependents, user.groceries, user.gas, user.medical, user.insurance, user.mortgage);
+                                    left_over_income = calculate_remaining_balance(income2, user.expenses1, total_loan, user.car_payment, user.Emergency_Fund, user.dependents, user.groceries, user.gas, user.medical, user.insurance, user.mortgage);
                                     Rs1 = fopen(user.usrname,"w");
                                     fprintf(Rs1,"%s\n",passave);
                                     printf("\nChanges complete");
@@ -546,6 +548,7 @@ int main() {
                                 break;
                             default:
                                 printf("\n\nERROR CODE 259\nInvalid option, Please select a valid option");
+                                //scanf("%d",&option_x);
                                 break;
                     }
                     }while(option_x!=14||zila==0);
