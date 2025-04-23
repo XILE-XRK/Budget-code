@@ -492,24 +492,25 @@ int main() {
                                     printf("\nChanges complete");
                                     printf("\nPrinting your information\n");
                                     printLoop();
+                                    fprintf(Rs1,"\nYEARLY EXPENSES\n");
                                     fprintf(Rs1, "\n+-----------------------+---------------+\n");
                                     fprintf(Rs1, "| Category             | Value          |\n");
                                     fprintf(Rs1, "+-----------------------+---------------+\n");
                                     fprintf(Rs1, "| Income post tax       | %13.2f |\n", income2);
                                     fprintf(Rs1, "| Total Loans           | %13.2f |\n", user.Emergency_Fund);
-                                    fprintf(Rs1, "| Utilities (Monthly)   | %13.2f |\n", user.util);
+                                    fprintf(Rs1, "| Utilities (Monthly)   | %13.2f |\n", user.util*12);
                                     fprintf(Rs1, "| Dependents            | %13d |\n", user.dependents);
                                     fprintf(Rs1, "| Total Assets          | %13.2f |\n", user.assets);
-                                    fprintf(Rs1, "| Total Expenses        | %13.2f |\n", user.expenses1);
+                                    fprintf(Rs1, "| Total Expenses        | %13.2f |\n", user.expenses1*12);
                                     fprintf(Rs1, "| Emergency Fund        | %13.2f |\n", user.Emergency_Fund);
-                                    fprintf(Rs1, "| Grocery Bill          | %13.2f |\n", user.groceries);
-                                    fprintf(Rs1, "| Gas Bill              | %13.2f |\n", user.gas);
-                                    fprintf(Rs1, "| Monthly subscriptions | %13.2f |\n", user.subserv);
-                                    fprintf(Rs1, "| Monthly Medical Bill  | %13.2f |\n", user.medical);
-                                    fprintf(Rs1, "| Monthly Insurance Bill| %13.2f |\n", user.insurance);
-                                    fprintf(Rs1, "| Monthly Mortgage Bill | %13.2f |\n", user.mortgage);
+                                    fprintf(Rs1, "| Yearly Grocery Bill   | %13.2f |\n", user.groceries*12);
+                                    fprintf(Rs1, "| Yearly Gas Bill       | %13.2f |\n", user.gas*12);
+                                    fprintf(Rs1, "| Yearly subscriptions  | %13.2f |\n", user.subserv*12);
+                                    fprintf(Rs1, "| Yearly Medical Bill   | %13.2f |\n", user.medical*12);
+                                    fprintf(Rs1, "| Yearly Insurance Bill | %13.2f |\n", user.insurance*12);
+                                    fprintf(Rs1, "| Yearly Mortgage Bill  | %13.2f |\n", user.mortgage*12);
                                     fprintf(Rs1, "+-----------------------+---------------+\n");
-                                    fprintf(Rs1, "| Money Remaining       | %13.2f |\n", left_over_income);
+                                    fprintf(Rs1, "| Money Remaining Yearly| %13.2f |\n", left_over_income);
                                     fprintf(Rs1, "+-----------------------+---------------+\n");
                                     fclose(Rs1);
                                     budgetadvise(user.usrname,income2,left_over_income,user.Emergency_Fund,user.util,user.dependents,user.assets,user.expenses1,user.Emergency_Fund,user.groceries,user.gas,user.subserv,user.medical,user.insurance,user.mortgage);
@@ -542,7 +543,8 @@ int main() {
                                 }
                                 break;
                             case 18:
-                                printf("\nCancel\n");
+                                printf("\nExiting\n");
+                                sleep(3);
                                 fclose(Rs1);
                                 exit(0);
                                 break;
