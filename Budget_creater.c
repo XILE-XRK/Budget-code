@@ -19,7 +19,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "BCF.c"
-#define INFOLENGTH 60
+#define INFOLENGTH 100
 void printLoop();
 void flushInputBuffer(void);
 typedef struct{
@@ -50,7 +50,7 @@ int main() {
     char confir[INFOLENGTH] = {};
     char temploc[1888] = {};
     char usrname1[INFOLENGTH] = {};
-    int attempts = 0, ilios = 0, option = 0,option_x,carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0;
+    int attempts = 0, ilios = 0, option = 0,option_x,carpaymonths = 0,rs = 0,stat = 0,ZTX=0,izo = 0,zila = 0,IOJ = 0;
     float income2 = 0,tax_rate = 0.09,income_tax,total_loan = 0,carpay = 0,left_over_income = 0;
 
     printf("Welcome to the budget app.\n");
@@ -130,21 +130,27 @@ int main() {
 
     else if (strcmp(usrstat,"No")==0||strcmp(usrstat,"no")==0) {
         //Checks to see if a username already exist or not.
-        if (access(user.usrname, F_OK) != -1) {
-            printf("\nThat username already exists. Please restart and choose a new one.\n");
-            exit(1);
-        }
+
         // New user account creation
         printf("\nLet's create your account.\n");
 
-        printf("Enter a username (max 19 characters): ");
         //scanf("%19s",usrname);
+        while(1){
+        printf("\nEnter a username (max 19 characters): ");
         fgets(user.usrname,sizeof(user.usrname),stdin);
         user.usrname[strcspn(user.usrname, "\n")] = '\0';
-
+        FILE *Usr = fopen(user.usrname,"r");
+        if(Usr==NULL){
+            break;
+        }
+        else{
+            printf("\nAccount already exist, Either login, or choose a different username.\n");
+            fclose(Usr);
+        }
+        }
             FILE *Usr = fopen(user.usrname, "w");
         if (Usr == NULL) {
-            printf("\nError: Failed to create account.\n");
+            printf("\nError 9929: Failed to create account.\n");
             ilios=2;
             exit(0);
             }
