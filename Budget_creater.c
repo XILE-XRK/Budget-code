@@ -124,16 +124,14 @@ int main() {
                 }
             }
         }
-        
         }
     }
-
     else if (strcmp(usrstat,"No")==0||strcmp(usrstat,"no")==0) {
         //Checks to see if a username already exist or not.
 
+
         // New user account creation
         printf("\nLet's create your account.\n");
-
         //scanf("%19s",usrname);
         while(1){
         printf("\nEnter a username (max 19 characters): ");
@@ -660,7 +658,5 @@ int main() {
                     break;
         }
     }
-    
-
 return 0;
 }
