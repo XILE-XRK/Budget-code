@@ -95,14 +95,14 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     else if(((income2*.15)<=groceries*12)&&dependents<=1)
     {
         fprintf(Rdv,"\nYou are spending a little more than necessary for groceries considering you have one dependent but if your spending is under %.2f then it isn't a real issue",income2*.25);
-        groceries = income2*.20;
+        groceries = (income2*.20)/12;
     }
     else if (((income2*.15)<=groceries*12)&&dependents>=1)
     {
         fprintf(Rdv,"\nYou are over the recommended spending of 15%% for groceries, but considering you have %d dependents its understandable",dependents);
         if(groceries*12>(income2*.25)){
             fprintf(Rdv,"\nEven through you have %d dependents, you shouldn't really be spending over 25 percent of your yearly income on groceries alone, lets try to get that down to 25%%.",dependents);
-            groceries = income2*.25;
+            groceries = (income2*.25)/12;
         }
     }
     else if (((income2*.15)>=groceries*12)&&dependents>=1)
@@ -111,12 +111,12 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
         groceries = income2*.20;
         if(groceries*12>(income2*.25)){
             fprintf(Rdv,"\nEven through you have %d dependents, you shouldn't really be spending over 25 percent of your yearly income on groceries alone, lets try to get that down to 25%%.",dependents);
-            groceries = income2*.25;
+            groceries = (income2*.25)/12;
         }
     }
     else{
         fprintf(Rdv,"\nYour spending overall is to much considering its over 15%% of your total income, and it seems like you have no dependents to justify this overspending. Your groceries should go down to 20%% since it seems you'd still would like to be on the higher end of the grocery spending ladder");
-        groceries = income2*.20;
+        groceries = (income2*.20)/12;
     }
     if((income2*.30)<loan_amount)
     {
@@ -156,7 +156,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "| Total Expenses        | %13.2f  |\n", expense_limit);
     fprintf(Rdv, "| Emergency Fund        | %13.2f  |\n", Emergency_Fund);
     fprintf(Rdv, "| Grocery Bill          | %13.2f  |\n", groceries);
-    fprintf(Rdv, "| Gas Bill              | %13.2f  |\n", gas);
+    fprintf(Rdv, "| Gas Bill              | %13.2f  |\n", gas/12);
     fprintf(Rdv, "| Monthly subscriptions | %13.2f  |\n", subserv);
     fprintf(Rdv, "| Monthly Medical Bill  | %13.2f  |\n", medical);
     fprintf(Rdv, "| Savings               | %13.2f  |\n", savings);
