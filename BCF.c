@@ -56,7 +56,14 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     else if(dependents>0&&Emergency_Fund<=1000)
     {
         fprintf(Rdv,"\nYou have %.2f saved for emergencies and %d dependent(s), this isn't recommended because when something happens when you least expect it your emergency fund of %.2f won't be sufficient for what you would likely need to cover these emergencies.\nWe recommend an Emergency fund exceeding $3,500 for %d dependents",Emergency_Fund,dependents,Emergency_Fund,dependents);
+        if(income2/12<3500)
+        {
+            fprintf(Rdv,", But since you really can't afford that at this point and time, we are setting it to 500");
+            Emergency_Fund = 500;
+        }
+        else{
         Emergency_Fund = 3500;
+        }
     }
     else{
         fprintf(Rdv,"\nIt seems you have a sufficient amount of money saved up in your emergency fund for the %d dependent(s) you have",dependents);
@@ -67,12 +74,12 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
         fprintf(Rdv,"\nSince this is the case, you will have to go without any fun expenses such as eating out and more until we get this situation under control. Your expenses should be as close to 0 as you can get them.");
         expenses1 = expenses1*0;
     }
-    else if(income2*.5<loan_amount){
+    else if(income2*.15<loan_amount){
         fprintf(Rdv,"\nYour total loan amount seems to be more that 50%% of your income, which is an issue, its not as bad as you having more loans than your income, but it's not ideal. We can manage by dedicating, 17%% of your yearly income which is %.2f to trying to pay off this debt. If the debt is resulting form car payments.",income2*.17);
         fprintf(Rdv,"Then I'd recommend you trade in that car for a cheaper car that you can afford, as long as you have something that gets you from point a to point b That should be good enough to work.");
         debt_payment = (income2*.17)/12;
     }
-    else if((income2*.5>loan_amount)&&loan_amount>0)
+    else if((income2*.15>loan_amount)&&loan_amount>0)
     {
         fprintf(Rdv,"\nYour total loan amount seems to be under 50%% of your total income which is good. But its not zero, so lets get that paid off.\nI recommend you start allocating 20%% of your income to paying this debt off, as the closer you get to being debt free, the more you will be able to dedicate some of your income to saving");
         debt_payment = (income2*.20)/12;//calculates the amount you should put towards debt monthly 
@@ -94,7 +101,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     }
     else if(((income2*.15)<=groceries*12)&&dependents<=1)
     {
-        fprintf(Rdv,"\nYou are spending a little more than necessary for groceries considering you have one dependent but if your spending is under %.2f then it isn't a real issue",income2*.25);
+        fprintf(Rdv,"\nYou are spending a little more than necessary for groceries considering you have one dependent but if your spending is under %.2f then it isn't a real issue",(income2*.25)/12);
         groceries = (income2*.20)/12;
     }
     else if (((income2*.15)<=groceries*12)&&dependents>=1)
@@ -143,7 +150,24 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
         
     }
     fprintf(Rdv,"\nYou should be saving around 20%% of your income. So in your case around %.2f",income2*.25);
+    if(left_over_income<0)
+    {
+        fprintf(Rdv,", but since you are in the negatives its now going ot be zero.\n");
+    }
     savings = income2*.20;
+    if(left_over_income<0){
+        savings = 0;
+        if(gas>(income2*.05)/12){
+            gas = (income2*.05)/12;
+            fprintf(Rdv,"\nI assure you that you shouldn't need more than 5%%of your income going towards gas, so now its been changed to 5%%, which is. %.2f",gas);
+        }
+    }
+    if (left_over_income<0){
+        left_over_income = 0;
+    }
+    if(loan_amount>income2*3){
+        fprintf(Rdv,"\n---------------------WE HAVE A SERIOUS PROBLEM HERE.-------------------------\nYour income is less than 3x your income, somewhere along the way you've accumulated too much debt to feel free for a long while, \nBut if you follow these steps and you might even have to take out of your %.2f worth of assets in order to get out of this.\nThe sooner you stop giving away money to pay for these debts, the sooner your money can start working for you to make you well off.");
+    }
     fprintf(Rdv,"\n\nMonthly Budget\n");
     fprintf(Rdv, "\n+-----------------------+----------------+\n");
     fprintf(Rdv, "| Category              | Value          |\n");
@@ -153,13 +177,13 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "| Utilities (Monthly)   | %13.2f  |\n", util);
     fprintf(Rdv, "| Dependents            | %13d|\n", dependents);
     fprintf(Rdv, "| Total Assets          | %13.2f    |\n", assets);
-    fprintf(Rdv, "| Total Expenses        | %13.2f  |\n", expense_limit);
+    fprintf(Rdv, "| Total Expenses        | %13.2f  |\n", expenses1/12);
     fprintf(Rdv, "| Emergency Fund        | %13.2f  |\n", Emergency_Fund);
     fprintf(Rdv, "| Grocery Bill          | %13.2f  |\n", groceries);
-    fprintf(Rdv, "| Gas Bill              | %13.2f  |\n", gas/12);
+    fprintf(Rdv, "| Gas Bill              | %13.2f  |\n", gas);
     fprintf(Rdv, "| Monthly subscriptions | %13.2f  |\n", subserv);
     fprintf(Rdv, "| Monthly Medical Bill  | %13.2f  |\n", medical);
-    fprintf(Rdv, "| Savings               | %13.2f  |\n", savings);
+    fprintf(Rdv, "| Savings               | %13.2f  |\n", savings/12);
     fprintf(Rdv, "| Monthly Insurance Bill| %13.2f  |\n", insurance);
     fprintf(Rdv, "| Monthly Mortgage  Bill| %13.2f  |\n", mortgage);
     fprintf(Rdv, "| Debt payments(Monthly)| %13.2f  |\n", debt_payment);
