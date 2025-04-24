@@ -1,4 +1,3 @@
-// Sum of car loan
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -137,7 +136,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "\n+-----------------------+---------------+\n");
     fprintf(Rdv, "| Category             | Value          |\n");
     fprintf(Rdv, "+-----------------------+---------------+\n");
-    fprintf(Rdv, "| Income post tax       | %13.2f |\n", income2);
+    fprintf(Rdv, "| Income post tax       | %13.2f |\n", income2/12);
     fprintf(Rdv, "| Total Loans           | %13.2f |\n", loan_amount);
     fprintf(Rdv, "| Utilities (Monthly)   | %13.2f |\n", util);
     fprintf(Rdv, "| Dependents            | %13d |\n", dependents);
@@ -157,7 +156,7 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "+-----------------------+---------------+\n");
     if(left_over_income>1000)
     {
-    fprintf(Rdv,"\n\nWith the $%.2f dollars that you have left over, Consider investing, giving to charity or",left_over_income);
+    fprintf(Rdv,"\n\nWith the $%.2f dollars that you have left over, Consider investing, giving to charity or",left_over_income/12);
     if(dependents>0)
     {
         fprintf(Rdv," if your dependents are children, consider putting 40%% of that towards their college fund. Which is %.2f per month",(left_over_income*.40)/12);
