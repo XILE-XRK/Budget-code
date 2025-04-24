@@ -63,7 +63,7 @@ int main() {
                 printf("Enter username: ");
                 fgets(user.usrname,sizeof(user.usrname),stdin);
                 user.usrname[strcspn(user.usrname, "\n")] = '\0';
-                if(strncmp(user.usrname,"Q",1)==0||strncmp(user.usrname,"q",1)==0)
+                if(strcmp(user.usrname,"Q")==0||strcmp(user.usrname,"q")==0)
                 {
                     printf("\nExiting");
                     sleep(2);
@@ -202,8 +202,8 @@ int main() {
                 fclose(Usr3);
         
                 printf("\nLet us continue\n");
-        
-                printf("\nEnter the total house yearly income (You can use commas):\n");
+                //FILE * NZXT = fopen(usrname1,"w");
+                printf("\nEnter the total house yearly income:\n");
                 user.income = get_float_input();                
                 income2 = user.income - (user.income * tax_rate);
                 printf("\nYou entered an income value of %.2f.\n", user.income);
@@ -264,7 +264,7 @@ int main() {
                 user.groceries = get_float_input();
         
                 printf("\nEnter monthly gas expenses:\n");
-                user.groceries = get_float_input();
+                user.gas = get_float_input();
         
                 printf("\nEnter your monthly subscription payments:\n");
                 user.subserv = get_float_input();
@@ -290,36 +290,37 @@ int main() {
                     printf("\nFATAL ERROR 7838");
                     exit(0);
                 }
+                fprintf(Rs1,"%s",passave);
                 fprintf(Rs1,"\nYEARLY COST");
                 fprintf(Rs1, "\n+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Category              | Value         |\n");
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Income post tax       | %13.2f |\n", income2);
-                fprintf(NZXT,"%.2f",income2);
+                fprintf(NZXT,"%.2f",income2);//1
                 fprintf(Rs1, "| Total Loans           | %13.2f |\n", user.loan_amount);
-                fprintf(NZXT,"\n%.2f",user.loan_amount);
+                fprintf(NZXT,"\n%.2f",user.loan_amount);//2
                 fprintf(Rs1, "| Utilities (Annual)    | %13.2f |\n", user.util * 12);
-                fprintf(NZXT,"\n%.2f",user.util);
+                fprintf(NZXT,"\n%.2f",user.util);//3
                 fprintf(Rs1, "| Dependents            | %13d |\n", user.dependents);
-                fprintf(NZXT,"\n%d",user.dependents);
+                fprintf(NZXT,"\n%d",user.dependents);//4
                 fprintf(Rs1, "| Total Assets          | %13.2f |\n", user.assets);
-                fprintf(NZXT,"\n%.2f",user.assets);
+                fprintf(NZXT,"\n%.2f",user.assets);//5
                 fprintf(Rs1, "| Expenses Yearly       | %13.2f |\n", user.expenses1 *12);
-                fprintf(NZXT,"\n%.2f",user.expenses1);
+                fprintf(NZXT,"\n%.2f",user.expenses1);//6
                 fprintf(Rs1, "| Emergency Fund        | %13.2f |\n", user.Emergency_Fund);
-                fprintf(NZXT,"\n%.2f",user.Emergency_Fund);
+                fprintf(NZXT,"\n%.2f",user.Emergency_Fund);//7
                 fprintf(Rs1, "| Grocery Bill          | %13.2f |\n", user.groceries * 12);
-                fprintf(NZXT,"\n%.2f",user.groceries);
+                fprintf(NZXT,"\n%.2f",user.groceries);//8
                 fprintf(Rs1, "| Gas Bill              | %13.2f |\n", user.gas * 12);
-                fprintf(NZXT,"\n%.2f",user.gas);
+                fprintf(NZXT,"\n%.2f",user.gas);//9
                 fprintf(Rs1, "| Monthly subscriptions | %13.2f |\n", user.subserv * 12);
-                fprintf(NZXT,"\n%.2f",user.subserv);
+                fprintf(NZXT,"\n%.2f",user.subserv);//10
                 fprintf(Rs1, "| Monthly Medical Bill  | %13.2f |\n", user.medical * 12);
-                fprintf(NZXT,"\n%.2f",user.medical);
+                fprintf(NZXT,"\n%.2f",user.medical);//11
                 fprintf(Rs1, "| Monthly Insurance Bill| %13.2f |\n", user.insurance * 12);
-                fprintf(NZXT,"\n%.2f",user.insurance);
+                fprintf(NZXT,"\n%.2f",user.insurance);//12
                 fprintf(Rs1, "| Monthly Mortgage Bill | %13.2f |\n", user.mortgage * 12);
-                fprintf(NZXT,"\n%.2f",user.mortgage);
+                fprintf(NZXT,"\n%.2f",user.mortgage);//13
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Money Remaining       | %13.2f |\n",left_over_income);
                 fprintf(Rs1, "+-----------------------+---------------+\n");
@@ -389,7 +390,6 @@ int main() {
                 fscanf(NZXT,"%f",&user.insurance);
                 fscanf(NZXT,"%f",&user.mortgage);
                 fclose(NZXT);
-                Rs1 = fopen(user.usrname,"a");
                     do{
                         printf("\n\n\nWhat information would you like to update?\n");
                         printf("5  = Update income\n\n6  = Update expenses\n\n7  = Update Dependants\n\n8  = Update Assets\n\n9  = Update Loan Amount\n\n10 = Update Emergency Fund\n\n11 = Update Grocery Bill\n\n12 = Update Gas Bill\n\n13 = Update Monthly Subscriptions\n\n14 = Update Monthly Medical Bill\n\n15 = Update Monthly Insurance Bill\n\n16 = Update Mortgage Amount\n\n\n17 = Save Changes\n\n\n18 = Exit\n");
@@ -400,54 +400,63 @@ int main() {
                             case 5:
                                 printf("\n What is the new income value you would like to use?\n");
                                 user.income = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("Income Updated\n");
                                 break;
                             case 6:
                                 printf("\nWhat would you like to change your total expenses to?\n");
                                 user.expenses1 = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nExpenses Successfully Updated\n");
                                 break;
                             case 7:
                                 printf("What would you like to change your dependent count to?\n");
                                 user.dependents = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("Dependents successfully updated.\n");
                                 break;
                             case 8:
                                 printf("\nWhat would you like to change your asset amount to?\n");
                                 user.assets = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nThe asset amount has been updated successfully!\n");
                                 break;
                             case 9:
                                 printf("\nWhat would you like to change your loan amount to?\n");
                                 user.loan_amount = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nThe loan amount has been updated successfully!\n");
                                 break;
                             case 10:
                                 printf("\nWhat would you like to update your Emergency Fund to?\n");
                                 user.Emergency_Fund = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nThe Emergency Fund amount has been updated successfully\n");
                                 break;
                             case 11:
                                 printf("\nWhat would you like to update your Monthly grocery amount to?\n");
                                 user.groceries = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nMonthly Grocery Bill updated successfully\n");
                                 break;
                             case 12:
                                 printf("\nWhat would you like to update your Monthly gas bill to?\n");
                                 user.gas = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nMonthly Gas amount updated successfully\n");
                                 break;
                             case 13:
                                 printf("\nWhat would you like to update your Monthly Subscriptions to?\n");
                                 user.subserv = get_float_input();
+                                printf("\nPlease Wait\n");
                                 sleep(2);
                                 printf("\nMonthly Subscriptions updated successfully\n");
                                 break;
@@ -473,7 +482,6 @@ int main() {
                                 printf("\nAre you finished making changes?(Yes/No)\n");
                                 scanf("%s",confir);
                                 if(strncmp(confir,"Yes",3)==0||strncmp(confir,"yes",3)==0){
-                                    fclose(Rs1);
                                     Rs1 = fopen(user.usrname,"r");
                                     if(Rs1==NULL)
                                     {
