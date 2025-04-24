@@ -1,3 +1,19 @@
+/*CSE 1320 Project 
+ Budget App
+ By: Samuel - Alessandro - Hau 
+----------------------------------------------------------------------------------------------------------
+ Description:
+ This C program allows users to create, update, delete, and print personal budget plans.
+ As well as offer talor made budget reccomendations based on the users financial situation as best as it can with limited knowledge
+ Users can create accounts and log in. 
+----------------------------------------------------------------------------------------------------------
+ Compile:
+ gcc Budget_creator.c (Name of the source code "Budget_creator.c")
+ ./a.exe
+----------------------------------------------------------------------------------------------------------
+ Includes:
+ Defines, directives and a custom library ("BCF.c"), and structs for individual user info storage
+----------------------------------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -202,9 +218,16 @@ int main() {
                 fclose(Usr3);
         
                 printf("\nLet us continue\n");
-                //FILE * NZXT = fopen(usrname1,"w");
+                strcpy(usrname1, user.usrname);
+                strcat(usrname1,iggy);
+                FILE * NZXT = fopen(usrname1,"w");
+                if(NZXT==NULL){
+                    printf("\nFATAL ERROR 7838");
+                    exit(0);
+                }
                 printf("\nEnter the total house yearly income:\n");
-                user.income = get_float_input();                
+                user.income = get_float_input();   
+                fprintf(NZXT,"\n%.2f",income2);             
                 income2 = user.income - (user.income * tax_rate);
                 printf("\nYou entered an income value of %.2f.\n", user.income);
                 printf("\nDo you currently have any car payments? (Yes/No)\n");
@@ -236,9 +259,11 @@ int main() {
                 printf("\nEnter your current total loan amount:\n");
                 user.loan_amount = get_float_input();
                 total_loan = calculate_total_loans(user.car_payment, user.loan_amount);
+                fprintf(NZXT,"\n%.2f",total_loan);
         
                 printf("\nEnter approximated amount of monthly utility bills:\n");
                 user.util = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.util);
         
                 printf("\nEnter number of dependents:\n");
                 scanf("%d", &user.dependents);
@@ -248,83 +273,74 @@ int main() {
                     if(user.dependents < 0){
                         printf("\nPlease enter a positive number:\n");
                         scanf("%d", &user.dependents);
+
                         flushInputBuffer();
                     } else {
                         izo++;
                     }
                 }
-        
+                fprintf(NZXT,"\n%d",user.dependents);
                 printf("\nEnter total expenses per month:\n");
                 user.expenses1 = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.expenses1);
         
                 printf("\nEnter your total assets:\n");
                 user.assets = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.assets);
         
                 printf("\nEnter monthly grocery bill:\n");
                 user.groceries = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.groceries);
         
                 printf("\nEnter monthly gas expenses:\n");
                 user.gas = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.gas);
         
                 printf("\nEnter your monthly subscription payments:\n");
                 user.subserv = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.subserv);
         
                 printf("\nEnter your monthly medical payments:\n");
                 user.medical = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.medical);
         
                 printf("\nEnter your Emergency Fund:\n");
                 user.Emergency_Fund = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.Emergency_Fund);
                 
                 printf("\nEnter your monthly insurance bill.\n");
                 user.insurance = get_float_input();
+                fprintf(NZXT,"\n%.2f",user.insurance);
                 printf("\nEnter your monthly mortgage bill.\n");
                 user.mortgage = get_float_input();
+                fprintf(NZXT,"\n%.2f\n",user.mortgage);
+                fclose(NZXT);
         
                 left_over_income = calculate_remaining_balance(income2, user.expenses1, total_loan, user.car_payment, user.Emergency_Fund, user.dependents, user.groceries, user.gas, user.medical, user.insurance, user.mortgage);
         
                 printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
                 printf("\nPrinting your information in your file.\n");
-                strcat(usrname1,iggy);
-                FILE * NZXT = fopen(usrname1,"w");
-                if(NZXT==NULL){
-                    printf("\nFATAL ERROR 7838");
-                    exit(0);
-                }
                 fprintf(Rs1,"%s",passave);
                 fprintf(Rs1,"\nYEARLY COST");
                 fprintf(Rs1, "\n+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Category              | Value         |\n");
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Income post tax       | %13.2f |\n", income2);
-                fprintf(NZXT,"%.2f",income2);//1
                 fprintf(Rs1, "| Total Loans           | %13.2f |\n", user.loan_amount);
-                fprintf(NZXT,"\n%.2f",user.loan_amount);//2
                 fprintf(Rs1, "| Utilities (Annual)    | %13.2f |\n", user.util * 12);
-                fprintf(NZXT,"\n%.2f",user.util);//3
                 fprintf(Rs1, "| Dependents            | %13d |\n", user.dependents);
-                fprintf(NZXT,"\n%d",user.dependents);//4
                 fprintf(Rs1, "| Total Assets          | %13.2f |\n", user.assets);
-                fprintf(NZXT,"\n%.2f",user.assets);//5
                 fprintf(Rs1, "| Expenses Yearly       | %13.2f |\n", user.expenses1 *12);
-                fprintf(NZXT,"\n%.2f",user.expenses1);//6
                 fprintf(Rs1, "| Emergency Fund        | %13.2f |\n", user.Emergency_Fund);
-                fprintf(NZXT,"\n%.2f",user.Emergency_Fund);//7
                 fprintf(Rs1, "| Grocery Bill          | %13.2f |\n", user.groceries * 12);
-                fprintf(NZXT,"\n%.2f",user.groceries);//8
                 fprintf(Rs1, "| Gas Bill              | %13.2f |\n", user.gas * 12);
-                fprintf(NZXT,"\n%.2f",user.gas);//9
                 fprintf(Rs1, "| Monthly subscriptions | %13.2f |\n", user.subserv * 12);
-                fprintf(NZXT,"\n%.2f",user.subserv);//10
                 fprintf(Rs1, "| Monthly Medical Bill  | %13.2f |\n", user.medical * 12);
-                fprintf(NZXT,"\n%.2f",user.medical);//11
                 fprintf(Rs1, "| Monthly Insurance Bill| %13.2f |\n", user.insurance * 12);
-                fprintf(NZXT,"\n%.2f",user.insurance);//12
                 fprintf(Rs1, "| Monthly Mortgage Bill | %13.2f |\n", user.mortgage * 12);
-                fprintf(NZXT,"\n%.2f",user.mortgage);//13
                 fprintf(Rs1, "+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Money Remaining       | %13.2f |\n",left_over_income);
                 fprintf(Rs1, "+-----------------------+---------------+\n");
-                fclose(NZXT);
                 fclose(Rs1);
                 printf("\nExiting\n");
                 sleep(2);
@@ -377,7 +393,7 @@ int main() {
                     exit(0);
                 }
                 fscanf(NZXT,"%f",&income2);
-                fscanf(NZXT,"%f",&user.Emergency_Fund);
+                fscanf(NZXT,"%f",&user.loan_amount);
                 fscanf(NZXT,"%f",&user.util);
                 fscanf(NZXT,"%d",&user.dependents);
                 fscanf(NZXT,"%f",&user.assets);
@@ -530,7 +546,7 @@ int main() {
                                         exit(0);
                                     }
                                     fprintf(NZXT,"%.2f",income2);
-                                    fprintf(NZXT,"\n%.2f",user.Emergency_Fund);
+                                    fprintf(NZXT,"\n%.2f",user.loan_amount);
                                     fprintf(NZXT,"\n%.2f",user.util);
                                     fprintf(NZXT,"\n%d",user.dependents);
                                     fprintf(NZXT,"\n%.2f",user.assets);
