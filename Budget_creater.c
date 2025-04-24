@@ -300,7 +300,7 @@ int main() {
                 fprintf(NZXT,"\n%.2f",user.loan_amount);
                 fprintf(Rs1, "| Utilities (Annual)    | %13.2f |\n", user.util * 12);
                 fprintf(NZXT,"\n%.2f",user.util);
-                fprintf(Rs1, "| Dependents            | %13d|\n", user.dependents);
+                fprintf(Rs1, "| Dependents            | %13d |\n", user.dependents);
                 fprintf(NZXT,"\n%d",user.dependents);
                 fprintf(Rs1, "| Total Assets          | %13.2f |\n", user.assets);
                 fprintf(NZXT,"\n%.2f",user.assets);
@@ -492,7 +492,7 @@ int main() {
                                     printf("\nChanges complete");
                                     printf("\nPrinting your information\n");
                                     printLoop();
-                                    fprintf(Rs1,"\nYEARLY EXPENSES\n");
+                                    fprintf(Rs1,"\nYEARLY COST\n");
                                     fprintf(Rs1, "\n+-----------------------+---------------+\n");
                                     fprintf(Rs1, "| Category             | Value          |\n");
                                     fprintf(Rs1, "+-----------------------+---------------+\n");
