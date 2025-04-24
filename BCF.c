@@ -128,6 +128,18 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
         else{
             fprintf(Rdv,"\nGood on you for not having any subscription services while you are in debt, you are one step closer to getting out of debt by having a way to reallocate money towards your debt.");
         }
+        if(util*12>income2*.10||util>income2*.15){
+            fprintf(Rdv,"\n\nIt also seems you are over the recommended monthly spending for utilities, because its exeeding the 10-15%% range that you should be at, It's best that you bring that monthly spending on utilities down to 15%%.\n");
+            util = (income2*.15)/12;
+        }
+        else{
+            fprintf(Rdv,"\nYour utility spending is okay for the common standard\n.");
+        }
+        if(groceries*12>income2*.2)
+        {
+            fprintf(Rdv,"\nYou are spending to much on groceries, Try to bring it down to around 15-20%%");
+            groceries = (income2*.20)/12;
+        }
         
     }
     fprintf(Rdv,"\nYou should be saving around 20%% of your income. So in your case around %.2f",income2*.25);
