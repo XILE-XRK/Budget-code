@@ -175,8 +175,8 @@ void budgetadvise(char usrname[],float income2,float left_over_income,float loan
     fprintf(Rdv, "| Income post tax       | %13.2f  |\n", income2/12);
     fprintf(Rdv, "| Total Loans           | %13.2f  |\n", loan_amount);
     fprintf(Rdv, "| Utilities (Monthly)   | %13.2f  |\n", util);
-    fprintf(Rdv, "| Dependents            | %13d|\n", dependents);
-    fprintf(Rdv, "| Total Assets          | %13.2f    |\n", assets);
+    fprintf(Rdv, "| Dependents            | %13d  |\n", dependents);
+    fprintf(Rdv, "| Total Assets          | %13.2f  |\n", assets);
     fprintf(Rdv, "| Total Expenses        | %13.2f  |\n", expenses1/12);
     fprintf(Rdv, "| Emergency Fund        | %13.2f  |\n", Emergency_Fund);
     fprintf(Rdv, "| Grocery Bill          | %13.2f  |\n", groceries);
