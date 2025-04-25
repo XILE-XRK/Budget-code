@@ -231,7 +231,7 @@ int main() {
                 }
                 printf("\nEnter the total house yearly income:\n");
                 user.income = get_float_input();   
-                fprintf(NZXT,"\n%.2f",income2);             
+                fprintf(NZXT,"%.2f",income2);             
                 income2 = user.income - (user.income * tax_rate);
                 printf("\nYou entered an income value of %.2f.\n", user.income);
                 printf("\nDo you currently have any car payments? (Yes/No)\n");
@@ -324,7 +324,7 @@ int main() {
         
                 printf("\nExcluding Assets, you should currently have %.2f left over considering all of the payments and expenses you have.", left_over_income);
                 printf("\nPrinting your information in your file.\n");
-                fprintf(Rs1,"%s",passave);
+                //fprintf(Rs1,"%s",passave);
                 fprintf(Rs1,"\nYEARLY COST");
                 fprintf(Rs1, "\n+-----------------------+---------------+\n");
                 fprintf(Rs1, "| Category              | Value         |\n");
